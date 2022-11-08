@@ -11,6 +11,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.18.0
+      - name: Grant execute permission for package.json
+        run: chmod +x package.json
       - name: Install dependencies
         run: npm ci
       - name: Run tests
