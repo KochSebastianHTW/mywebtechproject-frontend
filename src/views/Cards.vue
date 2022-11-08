@@ -1,6 +1,6 @@
 <template>
   <h1>Welcome to Cards</h1>
-  <div class="card-group" v-for="card in cards" :key="card.id">
+  <div class="list-group-horizontal" v-for="card in cards" :key="card.id">
     <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
       <div class="d-flex w-100 justify-content-between">
         <h5 class="card-header">{{ card.name }}</h5>
@@ -8,7 +8,7 @@
       </div>
       <div class="d-flex w-100 justify-content-between">
         <p class="card-text">{{ card.description }}</p>
-        <small class="text-end">{{ card.label_ids }}</small>
+        <small class="text-end">{{ card.label }}</small>
       </div>
       <p class="card-footer">{{ card.dueDate }}</p>
     </a>
@@ -21,25 +21,21 @@ export default {
   name: 'Cards',
   data () {
     return {
-      cards: [
-        {
-          id: 1,
-          name: 'M2',
-          dueDate: '14.11.2022T17:00',
-          description: 'blabla',
-          register: 'DONE'.toLocaleLowerCase(),
-          label_ids: null
-        },
-        {
-          id: 2,
-          name: 'M3',
-          dueDate: '05.12.2022T17:00',
-          description: 'bliblablup',
-          register: 'IN PROGRESS'.toLocaleLowerCase(),
-          label_ids: 4
-        }
-      ]
+      cards: []
     }
+  },
+  mounted () {
+    const requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    }
+
+    fetch('http://localhost:8080/api/v1/cards', requestOptions)
+      .then(response => response.json())
+      .then(result => result.forEach(card => {
+        this.cards.push(card)
+      }))
+      .catch(error => console.log('error', error))
   }
 }
 </script>
