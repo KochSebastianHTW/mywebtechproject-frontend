@@ -1,6 +1,6 @@
 <template>
   <h1>Welcome to Cards</h1>
-  <div class="list-group-horizontal" v-for="card in cards" :key="card.id">
+  <div class="list-group" v-for="card in cards" :key="card.id">
     <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
       <div class="d-flex w-100 justify-content-between">
         <h5 class="card-header">{{ card.name }}</h5>
