@@ -10,6 +10,12 @@
           <router-link class="nav-link" to="/about">About</router-link>
           <router-link class="nav-link" to="/cards">Board</router-link>
         </div>
+        <div class="border-end-0">
+          <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Karte suchen ..." aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Suchen</button>
+          </form>
+        </div>
       </div>
     </div>
   </nav>
@@ -23,5 +29,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
