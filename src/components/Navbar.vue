@@ -8,11 +8,11 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <div class="navbar-nav">
           <router-link class="nav-link" to="/about">About</router-link>
-          <router-link class="nav-link" to="/cards">Board</router-link>
+          <router-link class="nav-link" to="/board">Board</router-link>
         </div>
         <div class="border-end-0">
           <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Karte suchen ..." aria-label="Search">
+            <input id="search" class="form-control me-2" type="search" placeholder="Karte suchen ..." aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Suchen</button>
           </form>
         </div>
