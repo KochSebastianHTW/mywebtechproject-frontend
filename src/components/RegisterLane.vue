@@ -1,29 +1,38 @@
 <template>
-  <div class="register-lane" v-for="statusItem in status" :key="statusItem.name">
+  <div class="register-lane" v-for="statusItem in status" :key="statusItem.register">
     <h2 id="name">{{ statusItem.displayName }}</h2>
-    <div id="cardList">
-      <Cards id="cards" v-show="card.register === statusItem.register" v-for="card in cards" :key="card.id" :cards="this.card"></Cards>
+    <div id="cardList" v-for="card in cards" :key="card.id">
+      <Card class="Card" id="singleCard" v-if="card.register === statusItem.register" :card=card></Card>
     </div>
-    <card-create-form v-show="statusItem.register === 'OPEN'"></card-create-form>
+    <card-create-form v-if="statusItem.displayName === 'Open'"></card-create-form>
   </div>
 </template>
-
 <script>
-import Cards from '@/components/Cards'
+import Card from '@/components/Card'
 import CardCreateForm from '@/components/CardCreateForm'
+/*
+const allCards = document.querySelectorAll('.Card')
+const allLanes = document.querySelectorAll('.register-lane')
+
+allCards.forEach(item => {
+  item.addEventListener('dragstart', dragStart)
+  item.addEventListener('dragend', dragEnd)
+}) */
 
 export default {
   name: 'RegisterLane',
   components: {
     CardCreateForm,
-    Cards
+    Card
   },
   props: {
-    card: {}
+    cards: {
+      type: Array,
+      required: true
+    }
   },
   data () {
     return {
-      cards: [],
       status: [
         {
           displayName: 'Open',
@@ -44,6 +53,16 @@ export default {
       ]
     }
   }
+  /* ,
+  methods: {
+    dragStart () {
+      console.log('drag started')
+    },
+
+    dragEnd () {
+      console.log('drag ended')
+    }
+  } */
 }
 </script>
 
@@ -58,23 +77,30 @@ export default {
   max-height: 100%;
   white-space: normal;
   width: 24.4%;
+  padding-bottom: 5px;
   margin-left: 0.5%;
-  padding: 0.5%;
+  margin-top:  60px;
 }
-
 #name {
-  background: #0000;
+  background: darkgrey;
   border-radius: 3px;
   font-weight: 600;
-  margin: 1px 0;
+  margin: fill;
   max-height: 256px;
   min-height: 20px;
-  padding: 4px 8px;
-  resize: none;
+  padding: 10px;
+  color: navy;
 }
 card-create-form {
   border-radius: 3px;
   margin: 5px;
   padding: 10px;
+}
+#singleCard {
+  margin: 2px 5px;
+}
+
+.invisible{
+  display: none;
 }
 </style>

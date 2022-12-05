@@ -1,25 +1,30 @@
 <template>
   <div id="board">
-    <h1 id="Welcome">Welcome to Your Board</h1>
-    <RegisterLane :cards="this.cards"></RegisterLane>
+    <register-lane :cards="this.cards"></register-lane>
+  </div>
+  <div>
+    <LabelDisplay></LabelDisplay>
   </div>
 </template>
 
 <script>
 import RegisterLane from '@/components/RegisterLane'
+import LabelDisplay from '@/components/LabelDisplay'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Board',
   components: {
+    LabelDisplay,
     RegisterLane
   },
   data () {
     return {
-      cards: []
+      cards: [],
+      labels: []
     }
   },
-  mounted () {
+  created () {
     const endpointCards = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/cards'
     const requestOptions = {
       method: 'GET',
@@ -36,15 +41,4 @@ export default {
 </script>
 
 <style scoped>
-#Welcome {
-  color: navy;
-  font-weight: bolder;
-  width: auto;
-  border: 5px solid royalblue;
-  padding: 5px 0;
-  margin: 2%;
-}
-Board {
-  background-color: cornflowerblue;
-}
 </style>
