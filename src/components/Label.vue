@@ -1,6 +1,6 @@
 <template>
-  <div v-for="label in labels" :key="label.id">
-    <span id="{{label.id}}" class="badge rounded-pill " :style="{color: '#'+label.color}">Label-comp:{{ label.name }}</span>
+  <div>
+    <span id="Label" class="badge rounded-pill " :style="{color: '#'+label.color}">name: {{ label.name }}</span>
   </div>
 </template>
 
@@ -8,25 +8,10 @@
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Label',
-  data () {
-    return {
-      labels: []
+  props: {
+    label: {
+      type: Object
     }
-  },
-  beforeCreate () {
-    const requestOptions = {
-      method: 'GET',
-      redirect: 'follow'
-    }
-
-    const endpoints = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/labels'
-
-    fetch(endpoints, requestOptions)
-      .then(response => response.text())
-      .then(result => result.forEach(label => {
-        this.labels.push(label)
-      }))
-      .catch(error => console.log('error', error))
   }
 }
 </script>

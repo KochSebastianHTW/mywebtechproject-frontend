@@ -1,7 +1,4 @@
 <template>
-  <button id="launch" class="rounded" type="button" data-bs-toggle="modal" data-bs-target="#CardCreation">
-    + Neue Karte erstellen
-  </button>
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal fade" id="CardCreation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -10,7 +7,7 @@
           <form class="needs-validation" novalidate>
             <div class="modal-header justify-content-between d-flex">
               <div class="form-floating">
-                <input id="inputName" type="text" class="form-control" v-model="name" required>
+                <input id="inputName" type="text" class="form-control" placeholder="{{card.name}}" v-model="name" required>
                 <label for="inputName">Name</label>
                 <div class="invalid-feedback">
                   Please provide a name.
@@ -20,11 +17,11 @@
             </div>
             <div class="modal-body">
               <div class="form-floating">
-                <input id="inputDescription" type="text" class="form-control" v-model="description">
+                <input id="inputDescription" type="text" class="form-control" placeholder="{{card.description}}" v-model="description">
                 <label for="inputDescription">Beschreibung</label>
               </div>
               <div class="form-floating">
-                <input id="inputDate" type="datetime-local" class="form-control" v-model="dueDate" required>
+                <input id="inputDate" type="datetime-local" class="form-control" placeholder="{{card.dueDate}}" v-model="dueDate" required>
                 <label for="inputDate">Fälligkeit</label>
                 <div class="invalid-feedback">
                   Please choose a Due date.
@@ -32,6 +29,7 @@
               </div>
               <div class="form-floating">
                 <select id="inputSelectLabel" class="form-select mb-3" v-model="label" aria-label="Floating label select example">
+                  <option selected="{{label.id}}">{{ label.name }}</option>
                   <option v-for="label in labels" :key="label.id" value="{{ label.id }}" :style="{backgroundColor: '#' + label.color}">{{ label.name }}</option>
                 </select>
                 <label for="inputSelectLabel">Label</label>
@@ -65,6 +63,10 @@ export default {
     }
   },
   props: {
+    card: {
+      type: Object,
+      required: true
+    },
     labels: {
       type: Array,
       required: true

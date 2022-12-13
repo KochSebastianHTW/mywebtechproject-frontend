@@ -1,9 +1,9 @@
 <template>
-  <div id="board">
-    <register-lane :cards="this.cards"></register-lane>
+  <div id="register">
+    <register-lane :cards="this.cards" :labels="this.labels"></register-lane>
   </div>
-  <div>
-    <LabelDisplay></LabelDisplay>
+  <div id="labels">
+    <label-display :labels="this.labels"></label-display>
   </div>
 </template>
 
@@ -24,16 +24,25 @@ export default {
       labels: []
     }
   },
-  created () {
+  beforeCreate () {
     const endpointCards = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/cards'
+    const endpointsLabels = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/labels'
     const requestOptions = {
       method: 'GET',
       redirect: 'follow'
     }
+
     fetch(endpointCards, requestOptions)
       .then(response => response.json())
       .then(result => result.forEach(card => {
         this.cards.push(card)
+      }))
+      .catch(error => console.log('error', error))
+
+    fetch(endpointsLabels, requestOptions)
+      .then(response => response.json())
+      .then(result => result.forEach(label => {
+        this.labels.push(label)
       }))
       .catch(error => console.log('error', error))
   }

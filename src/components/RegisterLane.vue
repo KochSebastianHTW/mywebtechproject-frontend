@@ -2,11 +2,16 @@
   <div class="register-lane" v-for="statusItem in status" :key="statusItem.register">
     <h2 id="name">{{ statusItem.displayName }}</h2>
     <div id="cardList" v-for="card in cards" :key="card.id">
-      <Card class="Card" id="singleCard" v-if="card.register === statusItem.register" :card=card></Card>
+      <card-update-form>
+        <button id="singleCard" class="rounded" type="button" data-bs-toggle="modal" data-bs-target="#CardUpdating" v-if="card.register === statusItem.register">
+          <Card class="Card" v-if="card.register === statusItem.register" :card=card :labels=labels></Card>
+        </button>
+      </card-update-form>
     </div>
-    <card-create-form v-if="statusItem.displayName === 'Open'"></card-create-form>
+    <card-create-form v-if="statusItem.displayName === 'Open'" :labels=labels></card-create-form>
   </div>
 </template>
+
 <script>
 import Card from '@/components/Card'
 import CardCreateForm from '@/components/CardCreateForm'
@@ -27,6 +32,10 @@ export default {
   },
   props: {
     cards: {
+      type: Array,
+      required: true
+    },
+    labels: {
       type: Array,
       required: true
     }
@@ -86,6 +95,7 @@ export default {
   border-radius: 3px;
   font-weight: 600;
   margin: fill;
+  letter-spacing: 0.1em;
   max-height: 256px;
   min-height: 20px;
   padding: 10px;
@@ -96,8 +106,10 @@ card-create-form {
   margin: 5px;
   padding: 10px;
 }
-#singleCard {
-  margin: 2px 5px;
+button {
+  border-style: hidden;
+  width: 100%;
+  margin-bottom: 5px;
 }
 
 .invisible{
