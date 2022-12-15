@@ -1,13 +1,15 @@
 <template>
-  <div id="card" class="card" draggable="true" :style="{borderColor: status[0].borderColor, borderWidth: status[0].borderWith}">
+  <div id="card" class="card" draggable="true" :style="{borderColor: actual.borderColor, borderWidth: actual.borderWith}">
     <p id="cardHeader" class="card-header d-flex w-100 justify-content-between">{{ card.name }}</p>
     <div id="cardCenter">
       <p class="card-text d-flex w-100 justify-content-between">{{ card.description }}</p>
+    </div>
+    <div id="cardFooter" class="card-footer d-flex w-100 justify-content-between">
+      <small>{{ card.dueDate }}</small>
       <div v-for="label in labels" :key="label.id">
-        <Label id="Label" class="text-end" v-if="label.id === card.label" :key="label.id"></Label>
+        <Label id="Label" class="text-end" v-if="label.id === card.label" :key="label.id" :label=label></Label>
       </div>
     </div>
-    <small id="cardFooter" class="card-footer d-flex w-100 justify-content-between text-end">{{ card.dueDate }}</small>
   </div>
 </template>
 
@@ -22,21 +24,26 @@ export default {
     return {
       status: [
         {
-          status: 'time',
+          bez: 'enough time or done',
           borderColor: '#bababa',
           borderWith: '1px'
         },
         {
-          status: 'near',
+          bez: 'approach',
           borderColor: '#ff8c00',
-          borderWith: '2px'
+          borderWith: '1px'
         },
         {
-          status: 'due',
+          bez: 'over',
           borderColor: '#d10808',
-          borderWith: '2px'
+          borderWith: '1px'
         }
-      ]
+      ],
+      actual: {
+        bez: '',
+        aBorderColor: '',
+        aBorderWidth: ''
+      }
     }
   },
   props: {
@@ -47,7 +54,25 @@ export default {
       type: Array,
       required: true
     }
-  }
+  }/*,
+  mounted () {
+    const dateNow = Date.now()
+    const dateCard = this.card.DueDate
+
+    const diff = (dateCard.getTime() - dateNow.getTime()) / 1000
+    const hoursDiff = Math.abs(Math.round(diff))
+
+    if ((hoursDiff / 24) >= 5) {
+      this.actual = this.status[0]
+    } else if ((hoursDiff / 24) >= 1 && (hoursDiff / 24) < 5) {
+      this.actual = this.status[1]
+    } else if ((hoursDiff / 24) < 1) {
+      this.actual = this.status[2]
+    }
+    if (this.card.register === 'DONE' || this.card.register === 'ARCHIVE') {
+      this.actual = this.status[0]
+    }
+  } */
 }
 </script>
 
@@ -70,5 +95,7 @@ export default {
   padding: 3px;
   font-size: 0.7em;
   height: fit-content;
+}
+Label {
 }
 </style>

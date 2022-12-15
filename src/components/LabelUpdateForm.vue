@@ -1,47 +1,53 @@
 <template>
   <form class="needs-validation" novalidate>
-    <small>Neues Label erstellen</small>
-    <div class="input-group">
-      <input id="inputColor" type="color" class="form-control" v-model="color">
-      <input id="inputName" type="text" class="form-control" v-model="name" required>
-      <div class="invalid-feedback">
-        Please provide a name.
+      <div class="input-group">
+        <input id="inputColor" type="color" class="form-control" v-model="lColor">
+        <input id="inputName" type="text" class="form-control" v-model="lName" required :style="{backgroundColor: lColor}">
+        <div class="invalid-feedback">
+          Please provide a name.
+        </div>
+        <button type="submit" class="btn btn-outline-success" @click="updateLabel">Save</button>
       </div>
-    </div>
-    <div class="mb-3">
-      <button type="submit" class="btn btn-primary me-3" @click="createLabel">Create</button>
-      <button type="reset" class="btn btn-danger">Reset</button>
-    </div>
   </form>
 </template>
 
 <script>
+
 export default {
-  name: 'LabelCreateForm',
+  name: 'LabelUpdateForm',
   data () {
     return {
-      name: '',
-      color: ''
+      lName: '',
+      lColor: ''
     }
   },
+  props: {
+    label: {
+      Type: Object
+    }
+  },
+  mounted () {
+    this.lName = this.label.name
+    this.lColor = this.label.color
+  },
   methods: {
-    createLabel () {
+    updateLabel () {
       const valid = this.validate()
       if (valid) {
-        const endpoints = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/labels'
+        const endpoints = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/labels/' + this.label.id
 
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
 
-        const payload = JSON.stringify({
-          name: this.name,
-          color: this.color
+        const loadout = JSON.stringify({
+          name: this.lName,
+          color: this.lColor
         })
 
         const requestOptions = {
-          method: 'POST',
+          method: 'PUT',
           headers: myHeaders,
-          body: payload,
+          body: loadout,
           redirect: 'follow'
         }
 
@@ -79,13 +85,24 @@ export default {
   margin-bottom: 5px;
 }
 #inputColor {
-  max-width: 45px;
-  height: 45px;
+  max-width: 20px;
   padding: 0;
   border: hidden;
+  height: 30px;
 }
 #inputName {
   min-width: 100px;
   border: 1px black solid;
+  height: 30px;
+}
+#inputName:hover {
+  border: 2px black solid;
+  padding: 2px 10px 2px;
+  height: 30px;
+}
+button {
+  background-color: white;
+  border: 1px solid grey;
+  height: 30px;
 }
 </style>

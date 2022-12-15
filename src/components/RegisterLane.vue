@@ -2,18 +2,14 @@
   <div class="register-lane" v-for="statusItem in status" :key="statusItem.register">
     <h2 id="name">{{ statusItem.displayName }}</h2>
     <div id="cardList" v-for="card in cards" :key="card.id">
-      <card-update-form>
-        <button id="singleCard" class="rounded" type="button" data-bs-toggle="modal" data-bs-target="#CardUpdating" v-if="card.register === statusItem.register">
-          <Card class="Card" v-if="card.register === statusItem.register" :card=card :labels=labels></Card>
-        </button>
-      </card-update-form>
+      <CardUpdateForm v-if="card.register === statusItem.register" :card="card" :labels="this.labels"></CardUpdateForm>
     </div>
     <card-create-form v-if="statusItem.displayName === 'Open'" :labels=labels></card-create-form>
   </div>
 </template>
 
 <script>
-import Card from '@/components/Card'
+import CardUpdateForm from '@/components/CardUpdateForm'
 import CardCreateForm from '@/components/CardCreateForm'
 /*
 const allCards = document.querySelectorAll('.Card')
@@ -28,7 +24,7 @@ export default {
   name: 'RegisterLane',
   components: {
     CardCreateForm,
-    Card
+    CardUpdateForm
   },
   props: {
     cards: {
@@ -96,6 +92,7 @@ export default {
   font-weight: 600;
   margin: fill;
   letter-spacing: 0.1em;
+  word-spacing: 0.1em;
   max-height: 256px;
   min-height: 20px;
   padding: 10px;

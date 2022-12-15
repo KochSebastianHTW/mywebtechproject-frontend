@@ -9,18 +9,24 @@
       </div>
       <div class="offcanvas-body">
         <div v-for="label in labels" :key="label.id">
-          <Label class="Label" :label=label></Label>
+          <div>
+            <LabelUpdateForm :label="label"></LabelUpdateForm>
+          </div>
         </div>
+      </div>
+      <div class="offcanvas-bottom">
+        <LabelCreateForm></LabelCreateForm>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Label from '@/components/Label'
+import LabelCreateForm from '@/components/LabelCreateForm'
+import LabelUpdateForm from '@/components/LabelUpdateForm'
 export default {
   name: 'LabelDisplay',
-  components: { Label },
+  components: { LabelUpdateForm, LabelCreateForm },
   props: {
     labels: {
       type: Array,
@@ -31,6 +37,11 @@ export default {
 </script>
 
 <style scoped>
+.offcanvas-bottom {
+  border-top: 2px solid grey;
+  margin: 2px;
+  padding: 2px;
+}
 .btn {
   position: fixed;
   width: fit-content;
@@ -39,5 +50,10 @@ export default {
   right: 20px;
   font-weight: bolder;
   background-color: #e3f2fd;
+  border: 2px solid navy;
+}
+.btn:hover {
+  background-color: #e3f2fd;
+  border: 1px solid navy;
 }
 </style>

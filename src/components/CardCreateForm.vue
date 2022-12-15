@@ -20,7 +20,7 @@
             </div>
             <div class="modal-body">
               <div class="form-floating">
-                <input id="inputDescription" type="text" class="form-control" v-model="description">
+                <textarea id="inputDescription" type="text" class="form-control" v-model="description"></textarea>
                 <label for="inputDescription">Beschreibung</label>
               </div>
               <div class="form-floating">
@@ -31,8 +31,9 @@
                 </div>
               </div>
               <div class="form-floating">
-                <select id="inputSelectLabel" class="form-select mb-3" v-model="label" aria-label="Floating label select example">
-                  <option v-for="label in labels" :key="label.id" value="{{ label.id }}" :style="{backgroundColor: '#' + label.color}">{{ label.name }}</option>
+                <select id="inputSelectLabel" class="form-select mb-3" v-model="labelId" aria-label="label select example">
+                  <option selected="">kein Label</option>
+                  <option v-for="label in labels" :key="label.id" :value=label.id :style="{backgroundColor: label.color}">{{ label.name }}</option>
                 </select>
                 <label for="inputSelectLabel">Label</label>
               </div>
@@ -61,7 +62,7 @@ export default {
       name: '',
       description: '',
       dueDate: '',
-      label: ''
+      labelId: ''
     }
   },
   props: {
@@ -83,7 +84,8 @@ export default {
           name: this.name,
           description: this.description,
           dueDate: this.dueDate,
-          register: 'OPEN'
+          register: 'OPEN',
+          label: this.labelId
         })
 
         const requestOptions = {
@@ -146,10 +148,15 @@ button {
   flex-direction: column;
   border-style: hidden;
 }
-input,select {
+#inputName {
+  min-width: 400px;
+}
+input, textarea, select {
   border: 1px solid #2c3e50;
-  height: 30px;
   width: 100%;
   border-radius: 8px;
+}
+label {
+  font-size: small;
 }
 </style>

@@ -11,8 +11,8 @@
           <router-link class="nav-link" to="/board">Board</router-link>
         </div>
         <form class="d-flex" role="search">
-          <input id="search" class="form-control me-2" type="search" placeholder="Karte suchen ..." aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Suchen</button>
+          <input id="search" class="form-control me-2" type="search" placeholder="Karte suchen ..." aria-label="Search" v-model="search">
+          <button class="btn btn-outline-success" type="submit" disabled>Suchen</button>
         </form>
       </div>
     </div>
@@ -34,5 +34,6 @@ export default {
 <style scoped>
 navbar {
   padding-bottom: 100px;
+  margin-bottom: 100px;
 }
 </style>

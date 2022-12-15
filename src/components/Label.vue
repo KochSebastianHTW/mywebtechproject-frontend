@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span id="Label" class="badge rounded-pill " :style="{color: '#'+label.color}">name: {{ label.name }}</span>
+    <small id="Label" class="badge rounded-pill " :style="{backgroundColor: label.color}">{{ label.name }}</small>
   </div>
 </template>
 
@@ -17,7 +17,7 @@ export default {
 </script>
 
 <style scoped>
-span {
+small {
   display: inline-block;
   position: relative;
   margin-bottom: 0;
@@ -27,9 +27,7 @@ span {
   max-width: 100%;
   height: 16px;
   box-sizing: border-box;
-  /*background-color: var(--onelabel-color, #DFE1E6);*/
   line-height: 16px;
-  /*color: var(--text-color);*/
   font-size: 12px;
   font-weight: 400;
   text-align: left;
