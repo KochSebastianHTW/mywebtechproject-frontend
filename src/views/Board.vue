@@ -4,7 +4,7 @@
       <register-lane :cards="this.cards" :labels="this.labels"></register-lane>
     </div>
     <div id="labelDisplayButton">
-      <label-display :labels="this.labels"></label-display>
+      <label-display :labels="this.labels" :cards="this.cards"></label-display>
     </div>
   </div>
 </template>

@@ -10,7 +10,7 @@
       <div class="offcanvas-body">
         <div v-for="label in labels" :key="label.id">
           <div>
-            <LabelUpdateForm :label="label"></LabelUpdateForm>
+            <LabelUpdateForm :label="label" :cards="this.cards"></LabelUpdateForm>
           </div>
         </div>
       </div>
@@ -29,6 +29,10 @@ export default {
   components: { LabelUpdateForm, LabelCreateForm },
   props: {
     labels: {
+      type: Array,
+      required: true
+    },
+    cards: {
       type: Array,
       required: true
     }

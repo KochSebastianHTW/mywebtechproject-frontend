@@ -10,7 +10,7 @@
           <form class="needs-validation" novalidate>
             <div class="modal-header justify-content-between d-flex">
               <div class="form-floating">
-                <input id="inputName" type="text" class="form-control" v-model="name" required>
+                <input id="inputName" type="text" class="form-control" v-model="name" required onclick="resetButton()">
                 <label for="inputName">Name</label>
                 <div class="invalid-feedback">
                   Please provide a name.
@@ -20,27 +20,25 @@
             </div>
             <div class="modal-body">
               <div class="form-floating">
-                <textarea id="inputDescription" type="text" class="form-control" v-model="description"></textarea>
+                <textarea id="inputDescription" type="text" class="form-control" v-model="description" onclick="resetButton()"></textarea>
                 <label for="inputDescription">Beschreibung</label>
               </div>
               <div class="form-floating">
-                <input id="inputDate" type="datetime-local" class="form-control" v-model="dueDate" required>
+                <input id="inputDate" type="datetime-local" class="form-control" v-model="dueDate" required onclick="resetButton()">
                 <label for="inputDate">Fälligkeit</label>
                 <div class="invalid-feedback">
                   Please choose a Due date.
                 </div>
               </div>
               <div class="form-floating">
-                <select id="inputSelectLabel" class="form-select mb-3" v-model="labelId" aria-label="label select example">
+                <select id="inputSelectLabel" class="form-select mb-3" v-model="labelId" aria-label="label select example" onclick="resetButton()">
                   <option selected="">kein Label</option>
                   <option v-for="label in labels" :key="label.id" :value=label.id :style="{backgroundColor: label.color}">{{ label.name }}</option>
                 </select>
                 <label for="inputSelectLabel">Label</label>
               </div>
-              <div class="mt-3">
-                <button type="submit" class="btn btn-outline-success me-3" @click="createCard">Create</button>
-                <button type="reset" class="btn btn-outline-danger me-3">Reset</button>
-              </div>
+              <button id="CreateBtn" type="submit" class="btn btn-outline-success me-3" @click="createCard" @mouseover="mouseOver">Create</button>
+              <button id="ResetBtn" type="reset" class="btn btn-outline-danger me-3" @click="resetButton">Reset</button>
             </div>
           </form>
 
@@ -53,6 +51,7 @@
 <script>
 import Label from '@/components/Label'
 
+let btnMove = 0
 export default {
   name: 'CardCreateForm',
   // eslint-disable-next-line vue/no-unused-components
@@ -72,6 +71,43 @@ export default {
     }
   },
   methods: {
+    mouseOver () {
+      if ((this.name === '' || this.dueDate === '') && btnMove === 0) {
+        this.buttonMoveLeft()
+        // eslint-disable-next-line vue/no-mutating-props
+        btnMove = 1
+        return false
+      }
+      if ((this.name === '' || this.dueDate === '') && btnMove === 1) {
+        this.buttonMoveRight()
+        // eslint-disable-next-line vue/no-mutating-props
+        btnMove = 2
+        return false
+      }
+      if ((this.name === '' || this.dueDate === '') && btnMove === 2) {
+        this.buttonMoveLeft()
+        // eslint-disable-next-line vue/no-mutating-props
+        btnMove = 1
+        return false
+      } else {
+        document.getElementById('CreateBtn').style.cursor = 'pointer'
+        return false
+      }
+    },
+    buttonMoveLeft () {
+      const button = document.getElementById('CreateBtn')
+      button.style.transform = 'translateX(-180%)'
+    },
+    buttonMoveRight () {
+      const button = document.getElementById('CreateBtn')
+      button.style.transform = 'translateX(0%)'
+    },
+    resetButton () {
+      const button = document.getElementById('CreateBtn')
+      button.style.transform = 'translateX(0%)'
+      this.name = ''
+      this.dueDate = ''
+    },
     createCard () {
       const valid = this.validate()
       if (valid) {
@@ -117,7 +153,7 @@ export default {
             form.classList.add('was-validated')
           }, false)
         })
-
+      console.log(valid)
       return valid
     }
   }
@@ -131,6 +167,22 @@ form {
 button {
   margin: 2px;
   border-width: 2px;
+}
+
+#CreateBtn {
+  padding: 0 30px;
+  cursor: default;
+  width: auto;
+  transition: 0.15s;
+  float: right;
+  height: 40px;
+  margin: 1px 5% 12px 0;
+}
+#ResetBtn {
+  float: left;
+  width: auto;
+  height: 40px;
+  padding: 0 30px;
 }
 #launch {
   font-size: smaller;

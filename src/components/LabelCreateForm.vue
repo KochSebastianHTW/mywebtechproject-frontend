@@ -1,16 +1,14 @@
 <template>
   <form class="needs-validation" novalidate>
-    <small>Neues Label erstellen</small>
+    <small class="float-start">Neues Label erstellen</small>
     <div class="input-group">
       <input id="inputColor" type="color" class="form-control" v-model="color">
-      <input id="inputName" type="text" class="form-control" v-model="name" required>
+      <input id="inputName" type="text" class="form-control" v-model="name" required :style="{backgroundColor: color}">
+      <button type="submit" class="btn btn-outline-success" @click="createLabel">Save</button>
+      <button type="button" class="btn btn-outline-danger" @click="resetColor">Reset</button>
       <div class="invalid-feedback">
         Please provide a name.
       </div>
-    </div>
-    <div class="mb-3">
-      <button type="submit" class="btn btn-outline-success me-3" @click="createLabel">Create</button>
-      <button type="reset" class="btn btn-outline-danger me-3">Reset</button>
     </div>
   </form>
 </template>
@@ -21,10 +19,14 @@ export default {
   data () {
     return {
       name: '',
-      color: ''
+      color: '#ffffff'
     }
   },
   methods: {
+    resetColor () {
+      this.name = ''
+      this.color = '#ffffff'
+    },
     createLabel () {
       const valid = this.validate()
       if (valid) {
@@ -68,6 +70,7 @@ export default {
           }, false)
         })
 
+      console.log(valid)
       return valid
     }
   }
@@ -88,7 +91,19 @@ export default {
   min-width: 100px;
   border: 1px black solid;
 }
+#inputColor:focus + input + button,
+#inputColor:focus + input + button + button,
+#inputName:focus + button,
+#inputName:focus + button + button{
+  visibility: visible;
+  transition: ease-in-out 200ms;
+  transform: translateX(-25px) translateZ(-25px);
+}
 .btn {
+  visibility: hidden;
   border-width: 2px;
+  right: -30px;
+  transition: ease-in-out 200ms;
+  transform: translateX(25px) translateZ(25px) scale(0);
 }
 </style>
