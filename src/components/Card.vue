@@ -2,7 +2,7 @@
   <div id="card" class="card" draggable="true" :style="{borderColor: actual.borderColor, borderWidth: actual.borderWith}">
     <p id="cardHeader" class="card-header d-flex w-100 justify-content-between">{{ card.name }}</p>
     <div id="cardCenter">
-      <p class="card-text d-flex w-100 justify-content-between">{{ card.description }}</p>
+      <p class="card-text overflow-scroll">{{ card.description }}</p>
     </div>
     <div id="cardFooter" class="card-footer d-flex w-100 justify-content-between">
       <small>{{ card.dueDate }}</small>
@@ -89,13 +89,15 @@ export default {
   font-size: small;
   display: flex;
   flex-direction: column;
-  height: 40px;
+  height: 50px;
+  break-after: auto;
 }
 #cardFooter {
   padding: 3px;
   font-size: 0.7em;
   height: fit-content;
 }
-Label {
+::-webkit-scrollbar {
+  display: none;
 }
 </style>

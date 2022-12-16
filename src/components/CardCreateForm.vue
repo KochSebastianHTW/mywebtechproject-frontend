@@ -37,9 +37,9 @@
                 </select>
                 <label for="inputSelectLabel">Label</label>
               </div>
-              <div class="mt-5">
-                <button type="submit" class="btn btn-primary me-3" @click="createCard">Create</button>
-                <button type="reset" class="btn btn-danger">Reset</button>
+              <div class="mt-3">
+                <button type="submit" class="btn btn-outline-success me-3" @click="createCard">Create</button>
+                <button type="reset" class="btn btn-outline-danger me-3">Reset</button>
               </div>
             </div>
           </form>
@@ -125,8 +125,12 @@ export default {
 </script>
 
 <style scoped>
+form {
+  background-color: lightblue;
+}
 button {
   margin: 2px;
+  border-width: 2px;
 }
 #launch {
   font-size: smaller;
@@ -138,6 +142,10 @@ button {
   display: flex;
   background-color: #ebecf0;
   user-select: none;
+}
+.modal-body {
+  max-height: calc(100vh - 210px);
+  overflow-y: auto;
 }
 .form-floating {
   margin: 5px;
@@ -155,6 +163,10 @@ input, textarea, select {
   border: 1px solid #2c3e50;
   width: 100%;
   border-radius: 8px;
+  background-color: floralwhite;
+}
+input:focus, textarea:focus, select:focus {
+  background-color: white;
 }
 label {
   font-size: small;

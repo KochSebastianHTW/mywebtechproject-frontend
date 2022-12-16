@@ -75,7 +75,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
    * gewünschte Änderungen im geöffneten Fenster vornehmen
    * Änderungen speichern oder Fenster schließen
 4. Karte verschieben
-   * ???
+   * beim Bearbeiten der Karte
+   * im geöffneten Fenster unten den Zustand auswählen
+   * Änderungen speichern oder Fenster schließen
 5. Karte löschen
    * ???
 6. Label erstellen
@@ -87,4 +89,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
    * aus den oben stehenden Labels auswählen und dann anpassen
    * im Anschluss speichern
 8. Label löschen
-   * ???
+   * beim Bearbeiten neben dem "Save" Button auf den "Delete" Button klicken

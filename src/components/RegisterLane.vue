@@ -1,8 +1,8 @@
 <template>
-  <div class="register-lane" v-for="statusItem in status" :key="statusItem.register">
+  <div class="register-lane overflow-hidden" v-for="statusItem in status" :key="statusItem.register">
     <h2 id="name">{{ statusItem.displayName }}</h2>
     <div id="cardList" v-for="card in cards" :key="card.id">
-      <CardUpdateForm v-if="card.register === statusItem.register" :card="card" :labels="this.labels"></CardUpdateForm>
+      <CardUpdateForm v-if="card.register === statusItem.register" :card="card" :labels="this.labels" :status="status"></CardUpdateForm>
     </div>
     <card-create-form v-if="statusItem.displayName === 'Open'" :labels=labels></card-create-form>
   </div>
@@ -79,12 +79,12 @@ export default {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  max-height: 100%;
   white-space: normal;
   width: 24.4%;
   padding-bottom: 5px;
   margin-left: 0.5%;
   margin-top:  60px;
+  overflow: hidden;
 }
 #name {
   background: darkgrey;
@@ -108,8 +108,7 @@ button {
   width: 100%;
   margin-bottom: 5px;
 }
-
-.invisible{
-  display: none;
+button:hover {
+  border: grey;
 }
 </style>

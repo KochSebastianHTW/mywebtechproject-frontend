@@ -3,10 +3,11 @@
       <div class="input-group">
         <input id="inputColor" type="color" class="form-control" v-model="lColor">
         <input id="inputName" type="text" class="form-control" v-model="lName" required :style="{backgroundColor: lColor}">
+        <button type="submit" class="btn btn-outline-success" @click="updateLabel">Save</button>
+        <button type="submit" class="btn btn-outline-danger" @click="updateLabel">Delete</button>
         <div class="invalid-feedback">
           Please provide a name.
         </div>
-        <button type="submit" class="btn btn-outline-success" @click="updateLabel">Save</button>
       </div>
   </form>
 </template>
@@ -82,10 +83,15 @@ export default {
 
 <style scoped>
 .input-group {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+}
+.input-group:focus-within {
+  border: 1px solid black;
+  margin-top: -1px;
+  margin-bottom: 9px;
 }
 #inputColor {
-  max-width: 20px;
+  max-width: 30px;
   padding: 0;
   border: hidden;
   height: 30px;
@@ -96,13 +102,24 @@ export default {
   height: 30px;
 }
 #inputName:hover {
-  border: 2px black solid;
-  padding: 2px 10px 2px;
-  height: 30px;
+  border-left: 1px solid white;
+  transition: 10ms;
+}
+#inputColor:focus + input + button,
+#inputColor:focus + input + button + button{
+  visibility: visible;
+}
+#inputName:focus + button,
+#inputName:focus + button + button{
+  visibility: visible;
 }
 button {
-  background-color: white;
-  border: 1px solid grey;
+  visibility: hidden;
+  border-width: 2px;
   height: 30px;
+  padding: 2px;
+}
+button:active {
+  visibility: visible;
 }
 </style>

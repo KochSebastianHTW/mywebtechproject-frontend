@@ -17,3 +17,11 @@ export default {
   }
 }
 </script>
+
+<style>
+.home {
+  position: absolute;
+  top: 60px;
+  width: 100%;
+}
+</style>

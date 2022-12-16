@@ -1,9 +1,11 @@
 <template>
-  <div id="register">
-    <register-lane :cards="this.cards" :labels="this.labels"></register-lane>
-  </div>
-  <div id="labels">
-    <label-display :labels="this.labels"></label-display>
+  <div id="board">
+    <div id="register">
+      <register-lane :cards="this.cards" :labels="this.labels"></register-lane>
+    </div>
+    <div id="labelDisplayButton">
+      <label-display :labels="this.labels"></label-display>
+    </div>
   </div>
 </template>
 
@@ -50,4 +52,7 @@ export default {
 </script>
 
 <style scoped>
+body {
+  background-color: cornflowerblue; /* kp warum das nicht klappt */
+}
 </style>

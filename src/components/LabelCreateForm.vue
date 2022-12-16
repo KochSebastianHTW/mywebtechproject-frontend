@@ -9,8 +9,8 @@
       </div>
     </div>
     <div class="mb-3">
-      <button type="submit" class="btn btn-primary me-3" @click="createLabel">Create</button>
-      <button type="reset" class="btn btn-danger">Reset</button>
+      <button type="submit" class="btn btn-outline-success me-3" @click="createLabel">Create</button>
+      <button type="reset" class="btn btn-outline-danger me-3">Reset</button>
     </div>
   </form>
 </template>
@@ -87,5 +87,8 @@ export default {
 #inputName {
   min-width: 100px;
   border: 1px black solid;
+}
+.btn {
+  border-width: 2px;
 }
 </style>

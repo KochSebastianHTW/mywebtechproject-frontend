@@ -2,49 +2,54 @@
   <button id="launch" class="rounded" type="button" data-bs-toggle="modal" data-bs-target="#CardUpdating" data-tilt data-tilt-scale="0.95" data-tilt-startY="40">
     <Card class="Card" :card=card :labels=labels></Card>
   </button>
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal fade" id="CardUpdating" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
 
-          <form class="needs-validation" novalidate>
-            <div class="modal-header justify-content-between d-flex">
-              <div class="form-floating">
-                <input id="inputName" type="text" class="form-control" v-model="cName" required>
-                <label for="inputName">Name</label>
-                <div class="invalid-feedback">
-                  Please provide a name.
-                </div>
-              </div>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <div class="form-floating">
-                <textarea id="inputDescription" type="text" class="form-control" v-model="cDescription"></textarea>
-                <label for="inputDescription">Beschreibung</label>
-              </div>
-              <div class="form-floating">
-                <input id="inputDate" type="datetime-local" class="form-control" v-model="cDueDate" required>
-                <label for="inputDate">Fälligkeit</label>
-                <div class="invalid-feedback">
-                  Please choose a Due date.
-                </div>
-              </div>
-              <div class="form-floating">
-                <select id="inputSelectLabel" class="form-select mb-3" v-model="labelId" aria-label="label select example">
-                  <option selected="">kein Label</option>
-                  <option v-for="label in labels" :key="label.id" :value=label.id :style="{backgroundColor: label.color}">{{ label.name }}</option>
-                </select>
-                <label for="inputSelectLabel">Label</label>
-              </div>
-              <div class="mt-5">
-                <button type="submit" class="btn btn-primary me-3" @click="updateCard">Create</button>
-                <button type="reset" class="btn btn-danger">Reset</button>
+  <div class="modal fade" id="CardUpdating" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+
+        <form class="needs-validation" novalidate>
+          <div class="modal-header justify-content-between d-flex">
+            <div class="form-floating">
+              <input id="inputName" type="text" class="form-control" v-model="cName" required>
+              <label for="inputName">Name</label>
+              <div class="invalid-feedback">
+                Please provide a name.
               </div>
             </div>
-          </form>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-floating">
+              <textarea id="inputDescription" type="text" class="form-control" v-model="cDescription"></textarea>
+              <label for="inputDescription">Beschreibung</label>
+            </div>
+            <div class="form-floating">
+              <input id="inputDate" type="datetime-local" class="form-control" v-model="cDueDate" required>
+              <label for="inputDate">Fälligkeit</label>
+              <div class="invalid-feedback">
+                Please choose a Due date.
+              </div>
+            </div>
+            <div class="form-floating">
+              <select id="inputSelectLabel" class="form-select mb-3" v-model="labelId" aria-label="label select example">
+                <option selected="" value="">kein Label</option>
+                <option v-for="label in labels" :key="label.id" :value=label.id :style="{backgroundColor: label.color}">{{ label.name }}</option>
+              </select>
+              <label for="inputSelectLabel">Label</label>
+            </div>
+              <div class="row align-items-center">
+                <div id="election" class="col" v-for="statusitem in status" :key="statusitem.displayName">
+                  <label id="registerName" class="justify-content-between">{{ statusitem.displayName }}
+                    <input id="toggle" type="radio" name="radio" :checked="statusitem.register === card.register" v-model="cRegister">
+                  </label>
+                </div>
+            </div>
+            <div class="mt-3">
+              <button type="submit" class="btn btn-outline-success me-3" @click="updateCard">Save</button>
+            </div>
+          </div>
+        </form>
 
-        </div>
       </div>
     </div>
   </div>
@@ -53,6 +58,7 @@
 <script>
 import Label from '@/components/Label'
 import Card from '@/components/Card'
+import moment from 'moment'
 
 export default {
   name: 'CardUpdateForm',
@@ -63,8 +69,8 @@ export default {
       cName: '',
       cDescription: '',
       cDueDate: '',
-      labelId: '',
-      cTest: ''
+      cRegister: '',
+      labelId: ''
     }
   },
   props: {
@@ -75,15 +81,23 @@ export default {
     labels: {
       type: Array,
       required: true
+    },
+    status: {
+      type: Array,
+      required: true
     }
   },
   mounted () {
     this.cName = this.card.name
     this.cDescription = this.card.description
-    this.cDueDate = this.card.dueDate
+    this.cDueDate = this.formatDate(this.card.dueDate)
+    this.cRegister = this.card.register
     this.labelId = this.card.label
   },
   methods: {
+    formatDate (myDate) {
+      return moment(myDate).format()
+    },
     updateCard () {
       const valid = this.validate()
       if (valid) {
@@ -97,7 +111,7 @@ export default {
           name: this.cName,
           description: this.cDescription,
           dueDate: this.cDueDate,
-          register: this.card.register,
+          register: this.cRegister,
           label: this.labelId
         })
 
@@ -139,15 +153,25 @@ export default {
 
 <style scoped>
 #launch {
-  width: 99%;
-  margin: 2px;
+  width: 98%;
+  margin: auto;
   border: hidden;
   transition: 300ms;
 }
 #launch:hover {
-  scale: 1.08;
-  background-color: transparent;
+  scale: 1.05;
   transition: 250ms;
+}
+.modal-body {
+  max-height: calc(100vh - 210px);
+  overflow-y: auto;
+}
+form {
+  background-color: lightblue;
+}
+button {
+  margin: 2px;
+  border-width: 2px;
 }
 .form-floating {
   margin: 5px;
@@ -158,10 +182,26 @@ export default {
   flex-direction: column;
   border-style: hidden;
 }
-input,select,textarea {
+#inputName {
+  min-width: 400px;
+}
+input, textarea, select {
   border: 1px solid #2c3e50;
-  height: 30px;
   width: 100%;
   border-radius: 8px;
+  background-color: floralwhite;
+}
+input:focus, textarea:focus, select:focus {
+  background-color: white;
+}
+label {
+  font-size: small;
+}
+#election {
+  width: 100%;
+}
+#registerName {
+  font-size: medium;
+  color: black;
 }
 </style>

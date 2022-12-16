@@ -4,7 +4,7 @@
 
     <div class="offcanvas offcanvas-end" tabindex="-1" id="LabelDisplayOffcanvas" aria-labelledby="offcanvasRightLabel">
       <div class="offcanvas-header">
-        <h5 id="offcanvasRightLabel">Deine Labels</h5>
+        <h3 id="heading">Deine Labels</h3>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">
@@ -42,6 +42,9 @@ export default {
   margin: 2px;
   padding: 2px;
 }
+.offcanvas {
+  background-color: lightblue;
+}
 .btn {
   position: fixed;
   width: fit-content;
@@ -50,10 +53,10 @@ export default {
   right: 20px;
   font-weight: bolder;
   background-color: #e3f2fd;
-  border: 2px solid navy;
+  border: 2px solid grey;
 }
 .btn:hover {
   background-color: #e3f2fd;
-  border: 1px solid navy;
+  border: 2px solid navy;
 }
 </style>
