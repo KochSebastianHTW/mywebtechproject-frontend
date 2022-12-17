@@ -2,7 +2,7 @@
   <div class="register-lane overflow-hidden" v-for="statusItem in status" :key="statusItem.register">
     <h2 id="name">{{ statusItem.displayName }}</h2>
     <div id="cardList" v-for="card in cards" :key="card.id">
-      <CardUpdateForm v-if="card.register === statusItem.register" :card="card" :labels="this.labels" :status="status"></CardUpdateForm>
+      <card-update-form v-if="card.register === statusItem.register" :card="card" :labels="this.labels" :status="status"></card-update-form>
     </div>
     <card-create-form v-if="statusItem.displayName === 'Open'" :labels=labels></card-create-form>
   </div>
@@ -77,14 +77,17 @@ export default {
   border-radius: 3px;
   float: left;
   box-sizing: border-box;
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
-  white-space: normal;
-  width: 24.4%;
+  /*white-space: normal;*/
+  width: 24.2%;
   padding-bottom: 5px;
-  margin-left: 0.5%;
-  margin-top:  60px;
-  overflow: hidden;
+  overflow-x: visible;
+  height: 100%;
+  margin:0 5px;
+  white-space: nowrap;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
 }
 #name {
   background: darkgrey;

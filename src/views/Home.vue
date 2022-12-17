@@ -7,7 +7,6 @@
     <p>1. Card Buttons öffnen immer nur selbe Card (update)</p>
     <p>2. Card Zustand reagiert nicht (update)</p>
     <p>3. Label-Löschung wirft Fehler (delete)</p>
-    <p>4. Card DueDate wird angezeigt (update)</p>
   </div>
 </template>
 

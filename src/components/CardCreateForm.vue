@@ -1,5 +1,5 @@
 <template>
-  <button id="launch" class="rounded" type="button" data-bs-toggle="modal" data-bs-target="#CardCreation">
+  <button id="launch" class="rounded-pill" type="button" data-bs-toggle="modal" data-bs-target="#CardCreation">
     + Neue Karte erstellen
   </button>
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -194,6 +194,14 @@ button {
   display: flex;
   background-color: #ebecf0;
   user-select: none;
+  width: fit-content;
+  position: relative;
+  bottom: 50%;
+  left: 20%;
+}
+#launch:hover {
+  background-color: whitesmoke;
+  border-radius: 20px;
 }
 .modal-body {
   max-height: calc(100vh - 210px);

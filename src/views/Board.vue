@@ -55,4 +55,10 @@ export default {
 body {
   background-color: cornflowerblue; /* kp warum das nicht klappt */
 }
+#register {
+  position: absolute;
+  left: 0;
+  top: 60px;
+  width: 100%;
+}
 </style>

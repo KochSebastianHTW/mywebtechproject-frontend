@@ -23,8 +23,8 @@ small {
   margin-bottom: 0;
   border-radius: 4px;
   padding: 0 8px;
-  min-width: 56px;
-  max-width: 100%;
+  min-width: 10%;
+  max-width: 180px;
   height: 16px;
   box-sizing: border-box;
   line-height: 16px;

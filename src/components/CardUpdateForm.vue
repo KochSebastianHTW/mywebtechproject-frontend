@@ -44,9 +44,7 @@
                   </label>
                 </div>
             </div>
-            <div class="mt-3">
-              <button type="submit" class="btn btn-outline-success me-3" @click="updateCard">Save</button>
-            </div>
+            <button id="SaveBtn" type="submit" class="btn btn-outline-success me-3" @click="updateCard" @mouseover="mouseOver">Save</button>
           </div>
         </form>
 
@@ -60,6 +58,7 @@ import Label from '@/components/Label'
 import Card from '@/components/Card'
 import moment from 'moment'
 
+let btnMove = 0
 export default {
   name: 'CardUpdateForm',
   // eslint-disable-next-line vue/no-unused-components
@@ -90,11 +89,48 @@ export default {
   mounted () {
     this.cName = this.card.name
     this.cDescription = this.card.description
-    this.cDueDate = this.formatDate(this.card.dueDate)
+    this.cDueDate = moment(this.card.dueDate).format('YYYY-MM-DDTHH:mm')
     this.cRegister = this.card.register
     this.labelId = this.card.label
   },
   methods: {
+    mouseOver () {
+      if ((this.cName === '' || this.cDueDate === '') && btnMove === 0) {
+        this.buttonMoveLeft()
+        // eslint-disable-next-line vue/no-mutating-props
+        btnMove = 1
+        return false
+      }
+      if ((this.cName === '' || this.cDueDate === '') && btnMove === 1) {
+        this.buttonMoveRight()
+        // eslint-disable-next-line vue/no-mutating-props
+        btnMove = 2
+        return false
+      }
+      if ((this.cName === '' || this.cDueDate === '') && btnMove === 2) {
+        this.buttonMoveLeft()
+        // eslint-disable-next-line vue/no-mutating-props
+        btnMove = 1
+        return false
+      } else {
+        document.getElementById('SaveBtn').style.cursor = 'pointer'
+        return false
+      }
+    },
+    buttonMoveLeft () {
+      const button = document.getElementById('SaveBtn')
+      button.style.transform = 'translateX(-180%)'
+    },
+    buttonMoveRight () {
+      const button = document.getElementById('SaveBtn')
+      button.style.transform = 'translateX(0%)'
+    },
+    resetButton () {
+      const button = document.getElementById('SaveBtn')
+      button.style.transform = 'translateX(0%)'
+      this.name = ''
+      this.dueDate = ''
+    },
     formatDate (myDate) {
       return moment(myDate).format()
     },
@@ -156,11 +192,11 @@ export default {
   width: 98%;
   margin: auto;
   border: hidden;
-  transition: 300ms;
+  transition: 150ms;
 }
 #launch:hover {
-  scale: 1.05;
-  transition: 250ms;
+  scale: 1.02;
+  transition: 150ms;
 }
 .modal-body {
   max-height: calc(100vh - 210px);
@@ -172,6 +208,15 @@ form {
 button {
   margin: 2px;
   border-width: 2px;
+}
+#SaveBtn {
+  padding: 0 30px;
+  cursor: default;
+  width: auto;
+  transition: 0.15s;
+  float: right;
+  height: 40px;
+  margin: 1px 5% 12px 0;
 }
 .form-floating {
   margin: 5px;
@@ -197,10 +242,9 @@ input:focus, textarea:focus, select:focus {
 label {
   font-size: small;
 }
-#election {
-  width: 100%;
-}
 #registerName {
+  position: relative;
+  bottom: 0;
   font-size: medium;
   color: black;
 }

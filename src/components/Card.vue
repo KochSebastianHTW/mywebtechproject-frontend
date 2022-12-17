@@ -5,9 +5,9 @@
       <p class="card-text overflow-scroll">{{ card.description }}</p>
     </div>
     <div id="cardFooter" class="card-footer d-flex w-100 justify-content-between">
-      <small>{{ card.dueDate }}</small>
-      <div v-for="label in labels" :key="label.id">
-        <Label id="Label" class="text-end" v-if="label.id === card.label" :key="label.id" :label=label></Label>
+      <small id="date">{{ this.dateInFormat }}</small>
+      <div >
+        <Label id="Label" v-for="label in labels" :key="label.id" v-show="label.id === card.label" :label=label></Label>
       </div>
     </div>
   </div>
@@ -15,6 +15,7 @@
 
 <script>
 import Label from '@/components/Label'
+import moment from 'moment'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -31,19 +32,20 @@ export default {
         {
           bez: 'approach',
           borderColor: '#ff8c00',
-          borderWith: '1px'
+          borderWith: '2px'
         },
         {
           bez: 'over',
           borderColor: '#d10808',
-          borderWith: '1px'
+          borderWith: '2px'
         }
       ],
       actual: {
         bez: '',
         aBorderColor: '',
         aBorderWidth: ''
-      }
+      },
+      dateInFormat: {}
     }
   },
   props: {
@@ -54,38 +56,53 @@ export default {
       type: Array,
       required: true
     }
-  }/*,
+  },
   mounted () {
-    const dateNow = Date.now()
-    const dateCard = this.card.DueDate
+    this.dateInFormat = moment(this.card.dueDate).format('DD.MM.YYYY HH:mm')
+    this.recalculateTime()
+    // setInterval(this.recalculateTime, 60 * 1000)
+    const d = new Date()
+    const sec = d.getSeconds()
+    setTimeout(() => {
+      setInterval(() => {
+        this.recalculateTime()
+      }, 60 * 1000)
+    }, (60 - sec) * 1000)
+  },
+  methods: {
+    recalculateTime () {
+      console.log('I\'m disinclined to acquiesce to your request -> ' + new Date())
+      const dateNow = Date.now()
+      const dateCard = Date.parse(this.card.dueDate)
+      const diff = dateCard - dateNow
 
-    const diff = (dateCard.getTime() - dateNow.getTime()) / 1000
-    const hoursDiff = Math.abs(Math.round(diff))
+      const diffMins = Math.round((diff / 1000) / 60)
+      const diffDays = diffMins / 60 / 24
 
-    if ((hoursDiff / 24) >= 5) {
-      this.actual = this.status[0]
-    } else if ((hoursDiff / 24) >= 1 && (hoursDiff / 24) < 5) {
-      this.actual = this.status[1]
-    } else if ((hoursDiff / 24) < 1) {
-      this.actual = this.status[2]
+      if (diffDays >= 1) {
+        this.actual = this.status[0]
+      } else if (diffDays >= 0 && diffDays < 1) {
+        this.actual = this.status[1]
+      } else if (diffDays < 0) {
+        this.actual = this.status[2]
+      }
+      if (this.card.register === 'DONE' || this.card.register === 'ARCHIVE') {
+        this.actual = this.status[0]
+      }
     }
-    if (this.card.register === 'DONE' || this.card.register === 'ARCHIVE') {
-      this.actual = this.status[0]
-    }
-  } */
+  }
 }
 </script>
 
 <style scoped>
 #cardHeader {
   color: cornflowerblue;
-  height: fit-content;
+  height: 30px;
   font-size: larger;
   padding: 3px;
 }
 #cardCenter {
   padding: 3px;
-  min-height: fit-content;
   font-size: small;
   display: flex;
   flex-direction: column;
@@ -96,6 +113,16 @@ export default {
   padding: 3px;
   font-size: 0.7em;
   height: fit-content;
+}
+#date {
+  position: relative;
+  left: 0;
+  bottom: 50%;
+}
+Label {
+  position: relative;
+  right: 0;
+  bottom: 50%;
 }
 ::-webkit-scrollbar {
   display: none;
