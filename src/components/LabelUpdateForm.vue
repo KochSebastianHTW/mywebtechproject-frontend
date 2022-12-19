@@ -37,24 +37,51 @@ export default {
     this.lColor = this.label.color
   },
   methods: {
+    resolveDependency () {
+      for (let i = 0; i < this.cards.length; i++) {
+        if (this.cards[i].label === this.label.id) {
+          // eslint-disable-next-line vue/no-mutating-props
+          const endpointsCard = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/cards/' + this.cards[i].id
+
+          const myHeaders = new Headers()
+          myHeaders.append('Content-Type', 'application/json')
+
+          const loadout = JSON.stringify({
+            name: this.cards[i].name,
+            description: this.cards[i].description,
+            dueDate: this.cards[i].dueDate,
+            register: this.cards[i].register,
+            label: null
+          })
+
+          const requestOptions = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: loadout,
+            redirect: 'follow'
+          }
+
+          fetch(endpointsCard, requestOptions)
+            .catch(error => console.log('error', error))
+        }
+      }
+    },
     deleteLabel () {
-      const endpoints = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/labels/' + this.label.id
+      this.resolveDependency()
+
+      const endpointsLabel = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/labels/' + this.label.id
 
       const requestOptions = {
         method: 'DELETE',
         redirect: 'follow'
       }
 
-      for (let i = 0; i < this.cards.length; i++) {
-        if (this.cards[i].label === this.label.id) {
-          // eslint-disable-next-line vue/no-mutating-props
-          this.cards[i].label = null
-        }
-      }
-      fetch(endpoints, requestOptions)
+      fetch(endpointsLabel, requestOptions)
         .then(response => response.text())
         .then(result => console.log(result))
         .catch(error => console.log('error', error))
+
+      window.location.reload()
     },
     updateLabel () {
       const valid = this.validate()
@@ -135,7 +162,8 @@ form:focus-within {
   transition: 10ms;
 }
 #inputFrames:focus-within + button,
-#inputFrames:focus-within + button + button{
+#inputFrames:focus-within + button + button,
+button:active{
   visibility: visible;
   transition: ease-in-out 200ms;
   transform: translateX(-25px) translateZ(-10px);
@@ -149,10 +177,5 @@ button {
   right: -30px;
   transition: ease-in-out 200ms;
   transform: translateX(25px) translateZ(10px) scale(0);
-}
-button:active {
-  visibility: visible;
-  transition: ease-in-out 200ms;
-  transform: translateX(-25px) translateZ(-10px);
 }
 </style>

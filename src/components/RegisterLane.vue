@@ -73,13 +73,12 @@ export default {
 
 <style scoped>
 .register-lane {
-  background-color: #ebecf0;
+  background-color: #f0f0f0;
   border-radius: 3px;
   float: left;
   box-sizing: border-box;
   display: inline-flex;
   flex-direction: column;
-  /*white-space: normal;*/
   width: 24.2%;
   padding-bottom: 5px;
   overflow-x: visible;
@@ -90,7 +89,7 @@ export default {
   -webkit-overflow-scrolling: touch;
 }
 #name {
-  background: darkgrey;
+  background: lightblue;
   border-radius: 3px;
   font-weight: 600;
   margin: fill;

@@ -48,6 +48,8 @@ export default {
         }
 
         fetch(endpoints, requestOptions)
+          .then(response => response.text())
+          .then(result => console.log(result))
           .catch(error => console.log('error', error))
       }
     },
@@ -70,7 +72,6 @@ export default {
           }, false)
         })
 
-      console.log(valid)
       return valid
     }
   }
@@ -94,7 +95,8 @@ export default {
 #inputColor:focus + input + button,
 #inputColor:focus + input + button + button,
 #inputName:focus + button,
-#inputName:focus + button + button{
+#inputName:focus + button + button,
+button:active{
   visibility: visible;
   transition: ease-in-out 200ms;
   transform: translateX(-25px) translateZ(-25px);

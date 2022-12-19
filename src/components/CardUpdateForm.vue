@@ -1,9 +1,9 @@
 <template>
-  <button id="launch" class="rounded" type="button" data-bs-toggle="modal" data-bs-target="#CardUpdating" data-tilt data-tilt-scale="0.95" data-tilt-startY="40">
+  <button id="launch" class="rounded" type="button" data-bs-toggle="modal" v-bind:data-bs-target="['#CardUpdate'+card.id]" data-tilt data-tilt-scale="0.95" data-tilt-startY="40">
     <Card class="Card" :card=card :labels=labels></Card>
   </button>
 
-  <div class="modal fade" id="CardUpdating" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" v-bind:id="['CardUpdate'+this.card.id]" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
 
@@ -40,10 +40,11 @@
               <div class="row align-items-center">
                 <div id="election" class="col" v-for="statusitem in status" :key="statusitem.displayName">
                   <label id="registerName" class="justify-content-between">{{ statusitem.displayName }}
-                    <input id="toggle" type="radio" name="radio" :checked="statusitem.register === card.register" v-model="cRegister">
+                    <br><input type="radio" name="radio" v-bind:checked="statusitem.register === this.card.register" :value="statusitem.register" v-model="cRegister">
                   </label>
                 </div>
             </div>
+            <br>
             <button id="SaveBtn" type="submit" class="btn btn-outline-success me-3" @click="updateCard" @mouseover="mouseOver">Save</button>
           </div>
         </form>
@@ -138,7 +139,6 @@ export default {
       const valid = this.validate()
       if (valid) {
         const endpoints = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/cards/' + this.card.id
-        this.cTest = endpoints
 
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
@@ -190,12 +190,13 @@ export default {
 <style scoped>
 #launch {
   width: 98%;
-  margin: auto;
+  margin: 0 0 5px 0;
   border: hidden;
+  background-color: transparent;
   transition: 150ms;
 }
 #launch:hover {
-  scale: 1.02;
+  scale: 1.05;
   transition: 150ms;
 }
 .modal-body {

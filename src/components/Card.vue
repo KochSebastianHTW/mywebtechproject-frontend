@@ -26,8 +26,8 @@ export default {
       status: [
         {
           bez: 'enough time or done',
-          borderColor: '#bababa',
-          borderWith: '1px'
+          borderColor: '#e0e0e0',
+          borderWith: '2px'
         },
         {
           bez: 'approach',
@@ -67,7 +67,7 @@ export default {
       setInterval(() => {
         this.recalculateTime()
       }, 60 * 1000)
-    }, (60 - sec) * 1000)
+    }, (60 - sec + 1) * 1000)
   },
   methods: {
     recalculateTime () {
@@ -76,8 +76,8 @@ export default {
       const dateCard = Date.parse(this.card.dueDate)
       const diff = dateCard - dateNow
 
-      const diffMins = Math.round((diff / 1000) / 60)
-      const diffDays = diffMins / 60 / 24
+      const diffMins = Math.round((diff / 1000))
+      const diffDays = diffMins / 60 / 60 / 24
 
       if (diffDays >= 1) {
         this.actual = this.status[0]
@@ -95,6 +95,9 @@ export default {
 </script>
 
 <style scoped>
+#card {
+  background-color: #e0e0e0;
+}
 #cardHeader {
   color: cornflowerblue;
   height: 30px;
