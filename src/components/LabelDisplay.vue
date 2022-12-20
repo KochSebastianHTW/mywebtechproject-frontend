@@ -9,9 +9,7 @@
       </div>
       <div class="offcanvas-body">
         <div v-for="label in labels" :key="label.id">
-          <div>
-            <LabelUpdateForm :label="label" :cards="this.cards"></LabelUpdateForm>
-          </div>
+          <LabelUpdateForm :label="label" :cards="this.cards"></LabelUpdateForm>
         </div>
       </div>
       <div class="offcanvas-bottom">

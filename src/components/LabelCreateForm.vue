@@ -1,11 +1,15 @@
 <template>
   <form class="needs-validation" novalidate>
-    <small class="float-start">Neues Label erstellen</small>
-    <div class="input-group">
+    <div id="NamingDiv">
+      <p id="NamingText">Neues Label erstellen</p>
+    </div>
+    <div id="inputGroup" class="d-inline-flex">
       <input id="inputColor" type="color" class="form-control" v-model="color">
       <input id="inputName" type="text" class="form-control" v-model="name" required :style="{backgroundColor: color}">
-      <button type="submit" class="btn btn-outline-success" @click="createLabel">Save</button>
-      <button type="button" class="btn btn-outline-danger" @click="resetColor">Reset</button>
+      <div id="buttons" class="d-flex">
+        <button type="submit" class="btn btn-outline-success" @click="createLabel">Save</button>
+        <button type="button" class="btn btn-outline-danger" @click="resetColor">Reset</button>
+      </div>
       <div class="invalid-feedback">
         Please provide a name.
       </div>
@@ -79,33 +83,50 @@ export default {
 </script>
 
 <style scoped>
-.input-group {
-  margin-bottom: 5px;
+#NamingDiv {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#NamingText {
+  width: 10em;
+}
+#inputGroup {
+  margin-top: -15px;
+  padding: 0;
+  width: 100%;
 }
 #inputColor {
-  max-width: 45px;
-  height: 45px;
+  min-width: 30px;
+  max-width: 30px;
+  height: 30px;
   padding: 0;
   border: hidden;
 }
 #inputName {
-  min-width: 100px;
-  border: 1px black solid;
+  width: available;
+  height: 30px;
+  border: 1px solid #777;
+  border-radius: 0;
+  text-overflow: ellipsis;
 }
-#inputColor:focus + input + button,
-#inputColor:focus + input + button + button,
-#inputName:focus + button,
-#inputName:focus + button + button,
+#inputColor:focus + input + div,
+#inputName:focus + div,
 button:active{
   visibility: visible;
   transition: ease-in-out 200ms;
-  transform: translateX(-25px) translateZ(-25px);
+  width: 25%;
 }
 .btn {
-  visibility: hidden;
+  padding: 2px;
   border-width: 2px;
-  right: -30px;
+  border-radius: 0;
+}
+#buttons {
+  visibility: hidden;
   transition: ease-in-out 200ms;
-  transform: translateX(25px) translateZ(25px) scale(0);
+  width: 0;
+  height: 30px;
 }
 </style>

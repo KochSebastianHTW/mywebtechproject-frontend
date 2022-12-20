@@ -4,9 +4,7 @@
     <h1>U know what to-do</h1>
     <br>
     <h4>Problemchen:</h4>
-    <p>1. Card Buttons öffnen immer nur selbe Card (update)</p>
-    <p>2. Card Zustand reagiert nicht (update)</p>
-    <p>3. Label-Löschung wirft Fehler (delete)</p>
+    <p>1. CardUpdateForm merkt sich ungespeicherte Werte (wird nicht reseted)</p>
   </div>
 </template>
 

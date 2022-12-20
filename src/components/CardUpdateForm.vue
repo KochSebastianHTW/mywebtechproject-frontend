@@ -16,7 +16,7 @@
                 Please provide a name.
               </div>
             </div>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button id="CloseBtn" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="resetCard"></button>
           </div>
           <div class="modal-body">
             <div class="form-floating">
@@ -31,9 +31,9 @@
               </div>
             </div>
             <div class="form-floating">
-              <select id="inputSelectLabel" class="form-select mb-3" v-model="labelId" aria-label="label select example">
-                <option selected="" value="">kein Label</option>
-                <option v-for="label in labels" :key="label.id" :value=label.id :style="{backgroundColor: label.color}">{{ label.name }}</option>
+              <select id="inputSelectLabel" class="form-select mb-3" v-model="labelId" aria-label="label select example" :style="{color: this.getLabelColor()}">
+                <option selected="selected" value="null" :style="{color: 'black'}">kein Label</option>
+                <option v-for="label in labels" :key="label.id" :value=label.id :style="{backgroundColor: label.color, color: 'black'}">{{ label.name }}</option>
               </select>
               <label for="inputSelectLabel">Label</label>
             </div>
@@ -46,6 +46,7 @@
             </div>
             <br>
             <button id="SaveBtn" type="submit" class="btn btn-outline-success me-3" @click="updateCard" @mouseover="mouseOver">Save</button>
+            <button id="DeleteBtn" type="button" class="btn btn-outline-danger me-3" @click="deleteCard">Delete</button>
           </div>
         </form>
 
@@ -55,15 +56,13 @@
 </template>
 
 <script>
-import Label from '@/components/Label'
 import Card from '@/components/Card'
 import moment from 'moment'
 
 let btnMove = 0
 export default {
   name: 'CardUpdateForm',
-  // eslint-disable-next-line vue/no-unused-components
-  components: { Label, Card },
+  components: { Card },
   data () {
     return {
       cName: '',
@@ -88,11 +87,7 @@ export default {
     }
   },
   mounted () {
-    this.cName = this.card.name
-    this.cDescription = this.card.description
-    this.cDueDate = moment(this.card.dueDate).format('YYYY-MM-DDTHH:mm')
-    this.cRegister = this.card.register
-    this.labelId = this.card.label
+    this.resetCard()
   },
   methods: {
     mouseOver () {
@@ -129,11 +124,37 @@ export default {
     resetButton () {
       const button = document.getElementById('SaveBtn')
       button.style.transform = 'translateX(0%)'
-      this.name = ''
-      this.dueDate = ''
     },
-    formatDate (myDate) {
-      return moment(myDate).format()
+    resetCard () {
+      this.cName = this.card.name
+      this.cDescription = this.card.description
+      this.cDueDate = moment(this.card.dueDate).format('YYYY-MM-DDTHH:mm')
+      this.cRegister = this.card.register
+      this.labelId = this.card.label
+    },
+    getLabelColor () {
+      if (this.labelId === null) {
+        return 'black'
+      }
+      for (let i = 0; i < this.labels.length; i++) {
+        if (this.labels[i].id === this.labelId) {
+          return this.labels[i].color
+        }
+      }
+    },
+    deleteCard () {
+      const endpoints = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/cards/' + this.card.id
+
+      const requestOptions = {
+        method: 'DELETE',
+        redirect: 'follow'
+      }
+
+      fetch(endpoints, requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error))
+      window.location.reload()
     },
     updateCard () {
       const valid = this.validate()
@@ -218,6 +239,12 @@ button {
   float: right;
   height: 40px;
   margin: 1px 5% 12px 0;
+}
+#DeleteBtn {
+  float: left;
+  width: auto;
+  height: 40px;
+  padding: 0 30px;
 }
 .form-floating {
   margin: 5px;

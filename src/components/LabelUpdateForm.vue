@@ -1,17 +1,17 @@
 <template>
-  <div class="input-group">
-    <form class="needs-validation d-inline-flex" novalidate>
-      <div id="inputFrames" class="d-inline-flex">
-        <input id="inputColor" type="color" class="form-control" v-model="lColor">
-        <input id="inputName" type="text" class="form-control" v-model="lName" required :style="{backgroundColor: lColor}">
-        <div class="invalid-feedback">
-          Please provide a name.
-        </div>
+  <form class="needs-validation" novalidate>
+    <div id="inputGroup" class="d-inline-flex">
+      <input id="inputColor" type="color" class="form-control" v-model="lColor">
+      <input id="inputName" type="text" class="form-control" v-model="lName" required :style="{backgroundColor: lColor}">
+      <div id="buttons" class="d-flex">
+        <button type="submit" class="btn btn-outline-success" @click="updateLabel">Save</button>
+        <button type="button" class="btn btn-outline-danger" @click="deleteLabel">Delete</button>
       </div>
-      <button type="submit" class="btn btn-outline-success" @click="updateLabel">Save</button>
-      <button type="button" class="btn btn-outline-danger" @click="deleteLabel">Delete</button>
-    </form>
-  </div>
+      <div class="invalid-feedback">
+        Please provide a name.
+      </div>
+    </div>
+  </form>
 </template>
 
 <script>
@@ -135,11 +135,13 @@ export default {
 </script>
 
 <style scoped>
-.input-group {
+#inputGroup {
   margin-bottom: 10px;
-  background: transparent;
+  padding: 0;
+  width: 100%;
 }
 #inputColor {
+  min-width: 30px;
   max-width: 30px;
   padding: 0;
   border: hidden;
@@ -147,35 +149,36 @@ export default {
   background-color: transparent;
 }
 #inputName {
-  min-width: 100px;
+  width: available;
   border-radius: unset;
-  border: 1px black solid;
+  border: 1px solid #777;
   height: 30px;
   text-overflow: ellipsis;
 }
-#inputFrames:hover{
+#inputGroup:hover{
   outline: 1pt solid white;
   transition: 10ms;
 }
-form:focus-within {
+#inputGroup:focus-within {
   outline: transparent;
   transition: 10ms;
 }
-#inputFrames:focus-within + button,
-#inputFrames:focus-within + button + button,
+#inputColor:focus + input + div,
+#inputName:focus + div,
 button:active{
   visibility: visible;
   transition: ease-in-out 200ms;
-  transform: translateX(-25px) translateZ(-10px);
+  width: 25%;
 }
-button {
-  visibility: hidden;
+.btn {
+  padding: 2px;
   border-width: 2px;
   border-radius: 0;
-  height: 30px;
-  padding: 2px;
-  right: -30px;
+}
+#buttons {
+  visibility: hidden;
   transition: ease-in-out 200ms;
-  transform: translateX(25px) translateZ(10px) scale(0);
+  width: 0;
+  height: 30px;
 }
 </style>
