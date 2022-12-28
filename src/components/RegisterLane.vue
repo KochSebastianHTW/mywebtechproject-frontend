@@ -4,21 +4,13 @@
     <div id="cardList" v-for="card in cards" :key="card.id">
       <card-update-form v-if="card.register === statusItem.register" :card="card" :labels="this.labels" :status="status"></card-update-form>
     </div>
-    <card-create-form v-if="statusItem.displayName === 'Open'" :labels=labels></card-create-form>
+    <card-create-form @created="refreshCards" v-if="statusItem.displayName === 'Open'" :labels=labels></card-create-form>
   </div>
 </template>
 
 <script>
 import CardUpdateForm from '@/components/CardUpdateForm'
 import CardCreateForm from '@/components/CardCreateForm'
-/*
-const allCards = document.querySelectorAll('.Card')
-const allLanes = document.querySelectorAll('.register-lane')
-
-allCards.forEach(item => {
-  item.addEventListener('dragstart', dragStart)
-  item.addEventListener('dragend', dragEnd)
-}) */
 
 export default {
   name: 'RegisterLane',
@@ -57,17 +49,13 @@ export default {
         }
       ]
     }
-  }
-  /* ,
+  },
+  emits: ['refresh'],
   methods: {
-    dragStart () {
-      console.log('drag started')
-    },
-
-    dragEnd () {
-      console.log('drag ended')
+    refreshCards () {
+      this.$emit('refresh')
     }
-  } */
+  }
 }
 </script>
 
@@ -102,8 +90,6 @@ export default {
 }
 card-create-form {
   border-radius: 3px;
-  margin: 5px;
-  padding: 10px;
 }
 button {
   border-style: hidden;

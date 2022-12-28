@@ -1,12 +1,10 @@
 <template>
-  <div id="board">
     <div id="register">
-      <register-lane :cards="this.cards" :labels="this.labels"></register-lane>
+      <register-lane @refresh="getCardsFromBackend" :cards="this.cards" :labels="this.labels"></register-lane>
     </div>
     <div id="labelDisplayButton">
       <label-display :labels="this.labels" :cards="this.cards"></label-display>
     </div>
-  </div>
 </template>
 
 <script>
@@ -26,20 +24,13 @@ export default {
       labels: []
     }
   },
-  beforeCreate () {
-    const endpointCards = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/cards'
+  beforeMount () {
     const endpointsLabels = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/labels'
     const requestOptions = {
       method: 'GET',
       redirect: 'follow'
     }
-
-    fetch(endpointCards, requestOptions)
-      .then(response => response.json())
-      .then(result => result.forEach(card => {
-        this.cards.push(card)
-      }))
-      .catch(error => console.log('error', error))
+    this.getCardsFromBackend()
 
     fetch(endpointsLabels, requestOptions)
       .then(response => response.json())
@@ -47,14 +38,29 @@ export default {
         this.labels.push(label)
       }))
       .catch(error => console.log('error', error))
+  },
+  methods: {
+    getCardsFromBackend () {
+      const endpointCards = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/cards'
+
+      const requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+      }
+
+      this.cards = []
+      fetch(endpointCards, requestOptions)
+        .then(response => response.json())
+        .then(result => result.forEach(card => {
+          this.cards.push(card)
+        }))
+        .catch(error => console.log('error', error))
+    }
   }
 }
 </script>
 
 <style scoped>
-body {
-  background-color: cornflowerblue; /* kp warum das nicht klappt */
-}
 #register {
   position: absolute;
   left: 0;

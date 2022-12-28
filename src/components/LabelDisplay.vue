@@ -8,9 +8,7 @@
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">
-        <div v-for="label in labels" :key="label.id">
-          <LabelUpdateForm :label="label" :cards="this.cards"></LabelUpdateForm>
-        </div>
+          <LabelUpdateForm v-for="label in labels" :key="label.id" :label="label" :cards="this.cards"></LabelUpdateForm>
       </div>
       <div class="offcanvas-bottom">
         <LabelCreateForm></LabelCreateForm>
@@ -39,10 +37,12 @@ export default {
 </script>
 
 <style scoped>
+.offcanvas-body {
+  padding: 0;
+  margin: 0;
+}
 .offcanvas-bottom {
   border-top: 2px solid grey;
-  margin: 2px;
-  padding: 2px;
 }
 .offcanvas {
   background-color: lightblue;

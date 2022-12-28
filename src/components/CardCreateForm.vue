@@ -7,7 +7,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
 
-          <form class="needs-validation" novalidate>
+          <form id="card-create-form" class="needs-validation" novalidate>
             <div class="modal-header justify-content-between d-flex">
               <div class="form-floating">
                 <input id="inputName" type="text" class="form-control" v-model="name" required>
@@ -16,7 +16,7 @@
                   Please provide a name.
                 </div>
               </div>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button id="close-offcanvas" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <div class="form-floating">
@@ -33,11 +33,11 @@
               <div class="form-floating">
                 <select id="inputSelectLabel" class="form-select mb-3" v-model="labelId" aria-label="label select example" :style="{color: this.getLabelColor()}">
                   <option selected="selected" value="null" :style="{color: 'black'}">kein Label</option>
-                  <option v-for="label in labels" :key="label.id" :value=label.id :style="{backgroundColor: label.color, color: 'black'}">{{ label.name }}</option>
+                  <option v-for="label in labels" :key="label.id" :value=label.id :style="{backgroundColor: label.color, color: getContrast(label.color)}">{{ label.name }}</option>
                 </select>
                 <label for="inputSelectLabel">Label</label>
               </div>
-              <button id="CreateBtn" type="submit" class="btn btn-outline-success me-3" @click="createCard" @mouseover="mouseOver">Create</button>
+              <button id="CreateBtn" type="submit" class="btn btn-outline-success me-3" @click.prevent="createCard" @mouseover="mouseOver">Create</button>
               <button id="ResetBtn" type="reset" class="btn btn-outline-danger me-3" @click="resetButton">Reset</button>
             </div>
           </form>
@@ -61,7 +61,8 @@ export default {
       name: '',
       description: '',
       dueDate: '',
-      labelId: ''
+      labelId: '',
+      serverValidationMessages: []
     }
   },
   props: {
@@ -70,7 +71,16 @@ export default {
       required: true
     }
   },
+  emits: ['created'],
   methods: {
+    getContrast (input) {
+      const hexcolor = input.slice(1)
+      const r = parseInt(hexcolor.substr(0, 2), 16)
+      const g = parseInt(hexcolor.substr(2, 2), 16)
+      const b = parseInt(hexcolor.substr(4, 2), 16)
+      const val = ((r * 299) + (g * 587) + (b * 114)) / 1000
+      return (val >= 128) ? 'black' : 'white'
+    },
     mouseOver () {
       if ((this.name === '' || this.dueDate === '') && btnMove === 0) {
         this.buttonMoveLeft()
@@ -118,9 +128,8 @@ export default {
         }
       }
     },
-    createCard () {
-      const valid = this.validate()
-      if (valid) {
+    async createCard () {
+      if (this.validate()) {
         const endpoints = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/cards'
 
         const myHeaders = new Headers()
@@ -141,30 +150,28 @@ export default {
           redirect: 'follow'
         }
 
-        fetch(endpoints, requestOptions)
-          .catch(error => console.log('error', error))
+        const response = await fetch(endpoints, requestOptions)
+        await this.handleResponse(response)
+      }
+    },
+    async handleResponse (response) {
+      if (response.ok) {
+        this.$emit('created', 'refresh')
+        this.resetButton()
+        document.getElementById('close-offcanvas').click()
+      } else if (response.status === 400) {
+        response = await response.json()
+        response.errors.forEach(error => {
+          this.serverValidationMessages.push(error.defaultMessage)
+        })
+      } else {
+        this.serverValidationMessages.push('unknown error occurred')
       }
     },
     validate () {
-      let valid = true
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      const forms = document.querySelectorAll('.needs-validation')
-
-      // Loop over them and prevent submission
-      Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-          form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-              valid = false
-              event.preventDefault()
-              event.stopPropagation()
-            }
-
-            form.classList.add('was-validated')
-          }, false)
-        })
-      console.log(valid)
-      return valid
+      const form = document.getElementById('card-create-form')
+      form.classList.add('was-validated')
+      return form.checkValidity()
     }
   }
 }

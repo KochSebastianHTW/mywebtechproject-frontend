@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar fixed-top navbar-expand-lg" style="background-color: #e3f2fd;">
     <div class="container-fluid">
-      <router-link class="navbar-brand" to="/">U Know What ToDo</router-link>
+      <router-link id="Title" class="navbar-brand" to="/">U Know What ToDo</router-link>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -32,8 +32,11 @@ export default {
 </script>
 
 <style scoped>
-navbar {
-  padding-bottom: 100px;
-  margin-bottom: 100px;
+#Title {
+  font-size: xx-large;
 }
+.container-fluid {
+  margin: -10px 0 -10px 0;
+}
+
 </style>

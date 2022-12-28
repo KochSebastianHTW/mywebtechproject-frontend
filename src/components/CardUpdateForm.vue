@@ -33,7 +33,7 @@
             <div class="form-floating">
               <select id="inputSelectLabel" class="form-select mb-3" v-model="labelId" aria-label="label select example" :style="{color: this.getLabelColor()}">
                 <option selected="selected" value="null" :style="{color: 'black'}">kein Label</option>
-                <option v-for="label in labels" :key="label.id" :value=label.id :style="{backgroundColor: label.color, color: 'black'}">{{ label.name }}</option>
+                <option v-for="label in labels" :key="label.id" :value=label.id :style="{backgroundColor: label.color, color: getContrast(label.color)}">{{ label.name }}</option>
               </select>
               <label for="inputSelectLabel">Label</label>
             </div>
@@ -90,6 +90,14 @@ export default {
     this.resetCard()
   },
   methods: {
+    getContrast (input) {
+      const hexcolor = input.slice(1)
+      const r = parseInt(hexcolor.substr(0, 2), 16)
+      const g = parseInt(hexcolor.substr(2, 2), 16)
+      const b = parseInt(hexcolor.substr(4, 2), 16)
+      const val = ((r * 299) + (g * 587) + (b * 114)) / 1000
+      return (val >= 128) ? 'black' : 'white'
+    },
     mouseOver () {
       if ((this.cName === '' || this.cDueDate === '') && btnMove === 0) {
         this.buttonMoveLeft()

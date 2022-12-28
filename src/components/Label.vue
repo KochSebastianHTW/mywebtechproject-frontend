@@ -1,6 +1,6 @@
 <template>
   <div>
-    <small id="Label" class="badge rounded-pill " :style="{backgroundColor: label.color, color: this.getContrast}">{{ label.name }}</small>
+    <small id="Label" class="badge rounded-pill " :style="{backgroundColor: label.color, color: this.getContrast(label.color)}">{{ label.name }}</small>
   </div>
 </template>
 
@@ -14,7 +14,8 @@ export default {
     }
   },
   methods: {
-    getContrast (hexcolor) {
+    getContrast (input) {
+      const hexcolor = input.slice(1)
       const r = parseInt(hexcolor.substr(0, 2), 16)
       const g = parseInt(hexcolor.substr(2, 2), 16)
       const b = parseInt(hexcolor.substr(4, 2), 16)

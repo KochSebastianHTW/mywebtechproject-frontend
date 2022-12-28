@@ -5,11 +5,9 @@
     </div>
     <div id="inputGroup" class="d-inline-flex">
       <input id="inputColor" type="color" class="form-control" v-model="color">
-      <input id="inputName" type="text" class="form-control" v-model="name" required :style="{backgroundColor: color}">
-      <div id="buttons" class="d-flex">
-        <button type="submit" class="btn btn-outline-success" @click="createLabel">Save</button>
-        <button type="button" class="btn btn-outline-danger" @click="resetColor">Reset</button>
-      </div>
+      <input id="inputName" type="text" class="form-control" v-model="name" required :style="{backgroundColor: this.color, color: getContrast(this.color)}">
+      <button type="submit" class="btn btn-outline-success" @click="createLabel">Create</button>
+      <button type="button" class="btn btn-outline-danger" @click="resetInput">Reset</button>
       <div class="invalid-feedback">
         Please provide a name.
       </div>
@@ -23,17 +21,26 @@ export default {
   data () {
     return {
       name: '',
-      color: '#ffffff'
+      color: '#ffffff',
+      serverValidationMessages: []
     }
   },
   methods: {
-    resetColor () {
+    getContrast (input) {
+      const hexcolor = input.slice(1)
+      const r = parseInt(hexcolor.substr(0, 2), 16)
+      const g = parseInt(hexcolor.substr(2, 2), 16)
+      const b = parseInt(hexcolor.substr(4, 2), 16)
+      const val = ((r * 299) + (g * 587) + (b * 114)) / 1000
+      return (val >= 128) ? 'black' : 'white'
+    },
+    resetInput () {
       this.name = ''
       this.color = '#ffffff'
     },
-    createLabel () {
-      const valid = this.validate()
-      if (valid) {
+    async createLabel () {
+      console.log('Creating Label: ' + this.name)
+      if (this.validate()) {
         const endpoints = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/labels'
 
         const myHeaders = new Headers()
@@ -51,32 +58,26 @@ export default {
           redirect: 'follow'
         }
 
-        fetch(endpoints, requestOptions)
-          .then(response => response.text())
-          .then(result => console.log(result))
-          .catch(error => console.log('error', error))
+        const response = await fetch(endpoints, requestOptions)
+        await this.handleResponse(response)
+      }
+    },
+    async handleResponse (response) {
+      if (response.ok) {
+        this.$emit('created', 'refresh')
+      } else if (response.status === 400) {
+        response = await response.json()
+        response.errors.forEach(error => {
+          this.serverValidationMessages.push(error.defaultMessage)
+        })
+      } else {
+        this.serverValidationMessages.push('unknown error occurred')
       }
     },
     validate () {
-      let valid = true
-
-      const forms = document.querySelectorAll('.needs-validation')
-
-      // Loop over them and prevent submission
-      Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-          form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-              valid = false
-              event.preventDefault()
-              event.stopPropagation()
-            }
-
-            form.classList.add('was-validated')
-          }, false)
-        })
-
-      return valid
+      const form = document.getElementById('card-create-form')
+      form.classList.add('was-validated')
+      return form.checkValidity()
     }
   }
 }
@@ -95,7 +96,7 @@ export default {
 #inputGroup {
   margin-top: -15px;
   padding: 0;
-  width: 100%;
+  width: 99%;
 }
 #inputColor {
   min-width: 30px;
@@ -111,22 +112,23 @@ export default {
   border-radius: 0;
   text-overflow: ellipsis;
 }
-#inputColor:focus + input + div,
-#inputName:focus + div,
+#inputName:focus + button,
+#inputName:focus + button + button,
+#inputColor:focus + input + button,
+#inputColor:focus + input + button + button,
 button:active{
   visibility: visible;
   transition: ease-in-out 200ms;
-  width: 25%;
+  width: 22%;
+  pause: 1s;
 }
 .btn {
-  padding: 2px;
-  border-width: 2px;
-  border-radius: 0;
-}
-#buttons {
   visibility: hidden;
   transition: ease-in-out 200ms;
   width: 0;
   height: 30px;
+  padding: 2px;
+  border-width: 2px;
+  border-radius: 0;
 }
 </style>
