@@ -8,10 +8,10 @@
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">
-          <LabelUpdateForm v-for="label in labels" :key="label.id" :label="label" :cards="this.cards"></LabelUpdateForm>
+          <LabelUpdateForm @updated="refreshData" v-for="label in labels" :key="label.id" :label="label" :cards="this.cards"></LabelUpdateForm>
       </div>
       <div class="offcanvas-bottom">
-        <LabelCreateForm></LabelCreateForm>
+        <LabelCreateForm @created="refreshData"></LabelCreateForm>
       </div>
     </div>
   </div>
@@ -31,6 +31,12 @@ export default {
     cards: {
       type: Array,
       required: true
+    }
+  },
+  emits: ['refresh'],
+  methods: {
+    refreshData () {
+      this.$emit('refresh')
     }
   }
 }

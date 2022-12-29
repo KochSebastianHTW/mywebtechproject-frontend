@@ -1,5 +1,5 @@
 <template>
-  <button id="launch" class="rounded" type="button" data-bs-toggle="modal" v-bind:data-bs-target="['#CardUpdate'+card.id]" data-tilt data-tilt-scale="0.95" data-tilt-startY="40">
+  <button id="launch" class="rounded" type="button" data-bs-toggle="modal" @click="resetCard" v-bind:data-bs-target="['#CardUpdate'+card.id]" data-tilt data-tilt-scale="0.95" data-tilt-startY="40">
     <Card class="Card" :card=card :labels=labels></Card>
   </button>
 
@@ -7,7 +7,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
 
-        <form class="needs-validation" novalidate>
+        <form v-bind:id="['card-update-form'+this.card.id]" class="needs-validation" novalidate>
           <div class="modal-header justify-content-between d-flex">
             <div class="form-floating">
               <input id="inputName" type="text" class="form-control" v-model="cName" required>
@@ -16,7 +16,7 @@
                 Please provide a name.
               </div>
             </div>
-            <button id="CloseBtn" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="resetCard"></button>
+            <button v-bind:id="['CloseBtn'+this.card.id]" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="form-floating">
@@ -45,7 +45,7 @@
                 </div>
             </div>
             <br>
-            <button id="SaveBtn" type="submit" class="btn btn-outline-success me-3" @click="updateCard" @mouseover="mouseOver">Save</button>
+            <button v-bind:id="['SaveBtn'+this.card.id]" type="submit" class="btn btn-outline-success me-3" @click.prevent="updateCard" @mouseover="mouseOver">Save</button>
             <button id="DeleteBtn" type="button" class="btn btn-outline-danger me-3" @click="deleteCard">Delete</button>
           </div>
         </form>
@@ -69,7 +69,8 @@ export default {
       cDescription: '',
       cDueDate: '',
       cRegister: '',
-      labelId: ''
+      labelId: '',
+      serverValidationMessages: []
     }
   },
   props: {
@@ -86,6 +87,7 @@ export default {
       required: true
     }
   },
+  emits: ['updated'],
   mounted () {
     this.resetCard()
   },
@@ -99,38 +101,36 @@ export default {
       return (val >= 128) ? 'black' : 'white'
     },
     mouseOver () {
+      const button = document.getElementById('SaveBtn' + this.card.id)
       if ((this.cName === '' || this.cDueDate === '') && btnMove === 0) {
-        this.buttonMoveLeft()
+        this.buttonMoveLeft(button)
         // eslint-disable-next-line vue/no-mutating-props
         btnMove = 1
         return false
       }
       if ((this.cName === '' || this.cDueDate === '') && btnMove === 1) {
-        this.buttonMoveRight()
+        this.buttonMoveRight(button)
         // eslint-disable-next-line vue/no-mutating-props
         btnMove = 2
         return false
       }
       if ((this.cName === '' || this.cDueDate === '') && btnMove === 2) {
-        this.buttonMoveLeft()
+        this.buttonMoveLeft(button)
         // eslint-disable-next-line vue/no-mutating-props
         btnMove = 1
         return false
       } else {
-        document.getElementById('SaveBtn').style.cursor = 'pointer'
+        button.style.cursor = 'pointer'
         return false
       }
     },
-    buttonMoveLeft () {
-      const button = document.getElementById('SaveBtn')
+    buttonMoveLeft (button) {
       button.style.transform = 'translateX(-180%)'
     },
-    buttonMoveRight () {
-      const button = document.getElementById('SaveBtn')
+    buttonMoveRight (button) {
       button.style.transform = 'translateX(0%)'
     },
-    resetButton () {
-      const button = document.getElementById('SaveBtn')
+    resetButton (button) {
       button.style.transform = 'translateX(0%)'
     },
     resetCard () {
@@ -139,6 +139,7 @@ export default {
       this.cDueDate = moment(this.card.dueDate).format('YYYY-MM-DDTHH:mm')
       this.cRegister = this.card.register
       this.labelId = this.card.label
+      this.resetButton(document.getElementById('SaveBtn' + this.card.id))
     },
     getLabelColor () {
       if (this.labelId === null) {
@@ -150,6 +151,12 @@ export default {
         }
       }
     },
+    isEquals () {
+      return this.cName === this.card.name &&
+        this.cDescription === this.card.description &&
+        this.cDueDate === this.card.dueDate &&
+        this.labelId === this.card.label
+    },
     deleteCard () {
       const endpoints = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/cards/' + this.card.id
 
@@ -159,14 +166,17 @@ export default {
       }
 
       fetch(endpoints, requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
         .catch(error => console.log('error', error))
-      window.location.reload()
+      this.$emit('updated')
     },
-    updateCard () {
-      const valid = this.validate()
-      if (valid) {
+    async updateCard () {
+      if (this.isEquals()) {
+        console.log('Closing')
+        document.getElementById('CloseBtn' + this.card.id).click()
+        return false
+      }
+      if (this.validate()) {
+        console.log('Updated')
         const endpoints = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/cards/' + this.card.id
 
         const myHeaders = new Headers()
@@ -187,30 +197,27 @@ export default {
           redirect: 'follow'
         }
 
-        fetch(endpoints, requestOptions)
-          .catch(error => console.log('error', error))
+        const response = await fetch(endpoints, requestOptions)
+        await this.handleResponse(response)
+      }
+    },
+    async handleResponse (response) {
+      if (response.ok) {
+        this.$emit('updated')
+        document.getElementById('CloseBtn' + this.card.id).click()
+      } else if (response.status === 400) {
+        response = await response.json()
+        response.errors.forEach(error => {
+          this.serverValidationMessages.push(error.defaultMessage)
+        })
+      } else {
+        this.serverValidationMessages.push('unknown error occurred')
       }
     },
     validate () {
-      let valid = true
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      const forms = document.querySelectorAll('.needs-validation')
-
-      // Loop over them and prevent submission
-      Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-          form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-              valid = false
-              event.preventDefault()
-              event.stopPropagation()
-            }
-
-            form.classList.add('was-validated')
-          }, false)
-        })
-
-      return valid
+      const form = document.getElementById('card-update-form' + this.card.id)
+      form.classList.add('was-validated')
+      return form.checkValidity()
     }
   }
 }
@@ -239,7 +246,7 @@ button {
   margin: 2px;
   border-width: 2px;
 }
-#SaveBtn {
+.btn-outline-success {
   padding: 0 30px;
   cursor: default;
   width: auto;

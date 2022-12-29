@@ -1,5 +1,5 @@
 <template>
-  <form class="needs-validation" novalidate>
+  <form v-bind:id="['label-update-form'+this.label.id]" class="needs-validation" novalidate>
     <div id="inputGroup" class="d-inline-flex">
       <input id="inputColor" type="color" class="form-control" v-model="lColor">
       <input id="inputName" type="text" class="form-control" v-model="lName" required :style="{backgroundColor: lColor, color: getContrast(lColor)}">
@@ -31,6 +31,7 @@ export default {
       required: true
     }
   },
+  emits: ['updated'],
   mounted () {
     this.lName = this.label.name
     this.lColor = this.label.color
@@ -74,6 +75,7 @@ export default {
       }
     },
     deleteLabel () {
+      console.log('deleting Label: ' + this.label.name)
       this.resolveDependency()
 
       const endpointsLabel = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/labels/' + this.label.id
@@ -84,16 +86,13 @@ export default {
       }
 
       fetch(endpointsLabel, requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
         .catch(error => console.log('error', error))
 
-      window.location.reload()
+      this.$emit('updated')
     },
     async updateLabel () {
       console.log('Updating Label: ' + this.label.name)
-      const valid = this.validate()
-      if (valid) {
+      if (this.validate()) {
         const endpoints = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/labels/' + this.label.id
 
         const myHeaders = new Headers()
@@ -117,7 +116,7 @@ export default {
     },
     async handleResponse (response) {
       if (response.ok) {
-        this.$emit('created', 'refresh')
+        this.$emit('updated')
       } else if (response.status === 400) {
         response = await response.json()
         response.errors.forEach(error => {
@@ -128,7 +127,7 @@ export default {
       }
     },
     validate () {
-      const form = document.getElementById('card-create-form')
+      const form = document.getElementById('label-update-form' + this.label.id)
       form.classList.add('was-validated')
       return form.checkValidity()
     }

@@ -2,9 +2,9 @@
   <div class="register-lane overflow-hidden" v-for="statusItem in status" :key="statusItem.register">
     <h2 id="name">{{ statusItem.displayName }}</h2>
     <div id="cardList" v-for="card in cards" :key="card.id">
-      <card-update-form v-if="card.register === statusItem.register" :card="card" :labels="this.labels" :status="status"></card-update-form>
+      <card-update-form @updated="refreshData" v-if="card.register === statusItem.register" :card="card" :labels="this.labels" :status="status"></card-update-form>
     </div>
-    <card-create-form @created="refreshCards" v-if="statusItem.displayName === 'Open'" :labels=labels></card-create-form>
+    <card-create-form @created="refreshData" v-if="statusItem.displayName === 'Open'" :labels=labels></card-create-form>
   </div>
 </template>
 
@@ -52,7 +52,7 @@ export default {
   },
   emits: ['refresh'],
   methods: {
-    refreshCards () {
+    refreshData () {
       this.$emit('refresh')
     }
   }

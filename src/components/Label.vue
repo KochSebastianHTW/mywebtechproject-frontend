@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <small id="Label" class="badge rounded-pill " :style="{backgroundColor: label.color, color: this.getContrast(label.color)}">{{ label.name }}</small>
-  </div>
+  <small id="Label" class="badge rounded-pill " :style="{backgroundColor: label.color, color: this.getContrast(label.color)}">{{ label.name }}</small>
 </template>
 
 <script>
@@ -33,8 +31,8 @@ small {
   margin-bottom: 0;
   border-radius: 4px;
   padding: 0 8px;
-  min-width: 10%;
-  max-width: 180px;
+  min-width: 0;
+  max-width: 160px;
   height: 16px;
   box-sizing: border-box;
   line-height: 16px;

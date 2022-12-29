@@ -1,6 +1,6 @@
 <template>
   <div id="card" class="card" draggable="true" :style="{borderColor: actual.borderColor, borderWidth: actual.borderWith}">
-    <p id="cardHeader" class="card-header d-flex w-100 justify-content-between">{{ card.name }}</p>
+    <p id="cardHeader" class="card-header d-inline-flex">{{ card.name }}</p>
     <div id="cardCenter">
       <p class="card-text overflow-scroll">{{ card.description }}</p>
     </div>
@@ -103,6 +103,7 @@ export default {
   height: 30px;
   font-size: larger;
   padding: 3px;
+  text-overflow: ellipsis;
 }
 #cardCenter {
   padding: 3px;

@@ -1,9 +1,9 @@
 <template>
     <div id="register">
-      <register-lane @refresh="getCardsFromBackend" :cards="this.cards" :labels="this.labels"></register-lane>
+      <register-lane @refresh="getDataFromBackend" :cards="this.cards" :labels="this.labels"></register-lane>
     </div>
     <div id="labelDisplayButton">
-      <label-display :labels="this.labels" :cards="this.cards"></label-display>
+      <label-display @refresh="getDataFromBackend" :labels="this.labels" :cards="this.cards"></label-display>
     </div>
 </template>
 
@@ -25,23 +25,12 @@ export default {
     }
   },
   beforeMount () {
-    const endpointsLabels = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/labels'
-    const requestOptions = {
-      method: 'GET',
-      redirect: 'follow'
-    }
-    this.getCardsFromBackend()
-
-    fetch(endpointsLabels, requestOptions)
-      .then(response => response.json())
-      .then(result => result.forEach(label => {
-        this.labels.push(label)
-      }))
-      .catch(error => console.log('error', error))
+    this.getDataFromBackend()
   },
   methods: {
-    getCardsFromBackend () {
+    getDataFromBackend () {
       const endpointCards = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/cards'
+      const endpointsLabels = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/labels'
 
       const requestOptions = {
         method: 'GET',
@@ -53,6 +42,14 @@ export default {
         .then(response => response.json())
         .then(result => result.forEach(card => {
           this.cards.push(card)
+        }))
+        .catch(error => console.log('error', error))
+
+      this.labels = []
+      fetch(endpointsLabels, requestOptions)
+        .then(response => response.json())
+        .then(result => result.forEach(label => {
+          this.labels.push(label)
         }))
         .catch(error => console.log('error', error))
     }

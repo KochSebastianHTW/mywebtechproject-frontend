@@ -25,6 +25,7 @@ export default {
       serverValidationMessages: []
     }
   },
+  emits: ['created'],
   methods: {
     getContrast (input) {
       const hexcolor = input.slice(1)
@@ -35,8 +36,9 @@ export default {
       return (val >= 128) ? 'black' : 'white'
     },
     resetInput () {
+      console.log('Reseting Label')
       this.name = ''
-      this.color = '#ffffff'
+      this.color = '#FFFFFF'
     },
     async createLabel () {
       console.log('Creating Label: ' + this.name)
@@ -64,7 +66,7 @@ export default {
     },
     async handleResponse (response) {
       if (response.ok) {
-        this.$emit('created', 'refresh')
+        this.$emit('created')
       } else if (response.status === 400) {
         response = await response.json()
         response.errors.forEach(error => {

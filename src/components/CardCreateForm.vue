@@ -1,48 +1,47 @@
 <template>
-  <button id="launch" type="button" data-bs-toggle="modal" data-bs-target="#CardCreation">
+  <button id="launch" type="button" data-bs-toggle="modal" data-bs-target="#CardCreation" @click="clearCard">
     + Neue Karte erstellen
   </button>
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal fade" id="CardCreation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
 
-          <form id="card-create-form" class="needs-validation" novalidate>
-            <div class="modal-header justify-content-between d-flex">
-              <div class="form-floating">
-                <input id="inputName" type="text" class="form-control" v-model="name" required>
-                <label for="inputName">Name</label>
-                <div class="invalid-feedback">
-                  Please provide a name.
-                </div>
-              </div>
-              <button id="close-offcanvas" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <div class="form-floating">
-                <textarea id="inputDescription" type="text" class="form-control" v-model="description"></textarea>
-                <label for="inputDescription">Beschreibung</label>
-              </div>
-              <div class="form-floating">
-                <input id="inputDate" type="datetime-local" class="form-control" v-model="dueDate" required>
-                <label for="inputDate">Fälligkeit</label>
-                <div class="invalid-feedback">
-                  Please choose a Due date.
-                </div>
-              </div>
-              <div class="form-floating">
-                <select id="inputSelectLabel" class="form-select mb-3" v-model="labelId" aria-label="label select example" :style="{color: this.getLabelColor()}">
-                  <option selected="selected" value="null" :style="{color: 'black'}">kein Label</option>
-                  <option v-for="label in labels" :key="label.id" :value=label.id :style="{backgroundColor: label.color, color: getContrast(label.color)}">{{ label.name }}</option>
-                </select>
-                <label for="inputSelectLabel">Label</label>
-              </div>
-              <button id="CreateBtn" type="submit" class="btn btn-outline-success me-3" @click.prevent="createCard" @mouseover="mouseOver">Create</button>
-              <button id="ResetBtn" type="reset" class="btn btn-outline-danger me-3" @click="resetButton">Reset</button>
-            </div>
-          </form>
+  <div class="modal fade" id="CardCreation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
 
-        </div>
+        <form id="card-create-form" class="needs-validation" novalidate>
+          <div class="modal-header justify-content-between d-flex">
+            <div class="form-floating">
+              <input id="inputName" type="text" class="form-control" v-model="name" required>
+              <label for="inputName">Name</label>
+              <div class="invalid-feedback">
+                Please provide a name.
+              </div>
+            </div>
+            <button id="close-offcanvas" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-floating">
+              <textarea id="inputDescription" type="text" class="form-control" v-model="description"></textarea>
+              <label for="inputDescription">Beschreibung</label>
+            </div>
+            <div class="form-floating">
+              <input id="inputDate" type="datetime-local" class="form-control" v-model="dueDate" required>
+              <label for="inputDate">Fälligkeit</label>
+              <div class="invalid-feedback">
+                Please choose a Due date.
+              </div>
+            </div>
+            <div class="form-floating">
+              <select id="inputSelectLabel" class="form-select mb-3" v-model="labelId" aria-label="label select example" :style="{backgroundColor: this.getLabelColor()}">
+                <option selected="selected" value="null" :style="{color: 'black'}">kein Label</option>
+                <option v-for="label in labels" :key="label.id" :value=label.id :style="{backgroundColor: label.color, color: getContrast(label.color)}">{{ label.name }}</option>
+              </select>
+              <label for="inputSelectLabel">Label</label>
+            </div>
+            <button id="CreateBtn" type="submit" class="btn btn-outline-success me-3" @click.prevent="createCard" @mouseover="mouseOver">Create</button>
+            <button id="ResetBtn" type="reset" class="btn btn-outline-danger me-3" @click="resetButton">Reset</button>
+          </div>
+        </form>
+
       </div>
     </div>
   </div>
@@ -50,6 +49,7 @@
 
 <script>
 import Label from '@/components/Label'
+import moment from 'moment/moment'
 
 let btnMove = 0
 export default {
@@ -115,8 +115,12 @@ export default {
     resetButton () {
       const button = document.getElementById('CreateBtn')
       button.style.transform = 'translateX(0%)'
+    },
+    clearCard () {
       this.name = ''
-      this.dueDate = ''
+      this.description = ''
+      this.dueDate = moment(new Date()).format('YYYY-MM-DDTHH:mm')
+      this.labelId = null
     },
     getLabelColor () {
       if (this.labelId === null) {
@@ -156,7 +160,7 @@ export default {
     },
     async handleResponse (response) {
       if (response.ok) {
-        this.$emit('created', 'refresh')
+        this.$emit('created')
         this.resetButton()
         document.getElementById('close-offcanvas').click()
       } else if (response.status === 400) {
@@ -245,6 +249,12 @@ input, textarea, select {
 }
 input:focus, textarea:focus, select:focus {
   background-color: white;
+}
+#inputSelectLabel {
+  background-blend-mode: exclusion;
+}
+#inputSelectLabel:focus {
+  background-blend-mode: unset;
 }
 label {
   font-size: small;
