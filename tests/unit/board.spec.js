@@ -1,5 +1,3 @@
-// noinspection ES6UnusedImports
-
 import RegisterLane from '@/components/RegisterLane'
 import LabelDisplay from '@/components/LabelDisplay'
 import Board from '@/views/Board'
@@ -30,7 +28,6 @@ describe("Testing 'Board.vue'", () => {
     })
 
     // then
-    const labelDisplay = wrapper.findComponent(LabelDisplay)
-    expect(labelDisplay.exists()).toBeTruthy()
+    expect(wrapper.find('#labelDisplayButton').findComponent(LabelDisplay)).toBeTruthy()
   })
 })

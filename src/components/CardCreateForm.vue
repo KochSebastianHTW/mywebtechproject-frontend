@@ -31,14 +31,14 @@
               </div>
             </div>
             <div class="form-floating">
-              <select id="inputSelectLabel" class="form-select mb-3" v-model="labelId" aria-label="label select example" :style="{backgroundColor: this.getLabelColor()}">
-                <option selected="selected" value="null" :style="{color: 'black'}">kein Label</option>
+              <select id="inputSelectLabel" class="form-select mb-3" v-model="labelId" aria-label="label select example" :style="{backgroundColor: getLabelColor(labelId), color: getContrast(getLabelColor(labelId))}">
+                <option selected="selected" :value="null" :style="{color: 'black', backgroundColor: 'white'}">kein Label</option>
                 <option v-for="label in labels" :key="label.id" :value=label.id :style="{backgroundColor: label.color, color: getContrast(label.color)}">{{ label.name }}</option>
               </select>
               <label for="inputSelectLabel">Label</label>
             </div>
             <button id="CreateBtn" type="submit" class="btn btn-outline-success me-3" @click.prevent="createCard" @mouseover="mouseOver">Create</button>
-            <button id="ResetBtn" type="reset" class="btn btn-outline-danger me-3" @click="resetButton">Reset</button>
+            <button id="ResetBtn" type="button" class="btn btn-outline-danger me-3" @click="resetButton(); clearCard()">Reset</button>
           </div>
         </form>
 
@@ -60,7 +60,7 @@ export default {
     return {
       name: '',
       description: '',
-      dueDate: '',
+      dueDate: null,
       labelId: '',
       serverValidationMessages: []
     }
@@ -74,6 +74,9 @@ export default {
   emits: ['created'],
   methods: {
     getContrast (input) {
+      if (input === '' || input === null) {
+        return 'black'
+      }
       const hexcolor = input.slice(1)
       const r = parseInt(hexcolor.substr(0, 2), 16)
       const g = parseInt(hexcolor.substr(2, 2), 16)
@@ -122,15 +125,17 @@ export default {
       this.dueDate = moment(new Date()).format('YYYY-MM-DDTHH:mm')
       this.labelId = null
     },
-    getLabelColor () {
-      if (this.labelId === null) {
-        return 'black'
+    getLabelColor (labelId) {
+      if (labelId === null || labelId === '') {
+        return '#FFFFFF'
       }
       for (let i = 0; i < this.labels.length; i++) {
-        if (this.labels[i].id === this.labelId) {
+        console.log(this.labels[i].id + ' <=> ' + labelId)
+        if (this.labels[i].id === labelId) {
           return this.labels[i].color
         }
       }
+      return '#FFFFFF'
     },
     async createCard () {
       if (this.validate()) {
@@ -144,7 +149,7 @@ export default {
           description: this.description,
           dueDate: this.dueDate,
           register: 'OPEN',
-          label: this.labelId
+          labelId: this.labelId
         })
 
         const requestOptions = {
@@ -218,7 +223,6 @@ button {
   user-select: none;
   width: fit-content;
   position: relative;
-  bottom: 50%;
   left: 20%;
 }
 #launch:hover {
@@ -245,16 +249,7 @@ input, textarea, select {
   border: 1px solid #2c3e50;
   width: 100%;
   border-radius: 8px;
-  background-color: floralwhite;
-}
-input:focus, textarea:focus, select:focus {
   background-color: white;
-}
-#inputSelectLabel {
-  background-blend-mode: exclusion;
-}
-#inputSelectLabel:focus {
-  background-blend-mode: unset;
 }
 label {
   font-size: small;

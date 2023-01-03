@@ -1,10 +1,12 @@
 <template>
-  <div class="register-lane overflow-hidden" v-for="statusItem in status" :key="statusItem.register">
+  <div class="register-lane" v-for="statusItem in status" :key="statusItem.register">
     <h2 id="name">{{ statusItem.displayName }}</h2>
-    <div id="cardList" v-for="card in cards" :key="card.id">
-      <card-update-form @updated="refreshData" v-if="card.register === statusItem.register" :card="card" :labels="this.labels" :status="status"></card-update-form>
+    <div class="list overflow-scroll">
+      <div id="cardList" v-for="card in cards" v-bind:key="card.id">
+        <card-update-form @updated="refreshData" v-if="card.register === statusItem.register" :card="card" :labels="this.labels" :status="status"></card-update-form>
+      </div>
+      <card-create-form @created="refreshData" v-if="statusItem.displayName === 'Open'" :labels=labels></card-create-form>
     </div>
-    <card-create-form @created="refreshData" v-if="statusItem.displayName === 'Open'" :labels=labels></card-create-form>
   </div>
 </template>
 
@@ -62,31 +64,26 @@ export default {
 <style scoped>
 .register-lane {
   background-color: #f0f0f0;
-  border-radius: 3px;
   float: left;
-  box-sizing: border-box;
-  display: inline-flex;
   flex-direction: column;
   width: 24.2%;
-  padding-bottom: 5px;
-  overflow-x: visible;
-  height: 100%;
   margin:0 5px;
   white-space: nowrap;
   position: relative;
-  -webkit-overflow-scrolling: touch;
 }
 #name {
   background: lightblue;
-  border-radius: 3px;
   font-weight: 600;
   margin: fill;
   letter-spacing: 0.1em;
   word-spacing: 0.1em;
-  max-height: 256px;
-  min-height: 20px;
-  padding: 10px;
+  height: auto;
+  padding: 8px;
   color: navy;
+}
+.list {
+  padding-top: 2px;
+  overflow-scrolling: touch;
 }
 card-create-form {
   border-radius: 3px;
@@ -98,5 +95,8 @@ button {
 }
 button:hover {
   border: grey;
+}
+::-webkit-scrollbar {
+  display: none;
 }
 </style>

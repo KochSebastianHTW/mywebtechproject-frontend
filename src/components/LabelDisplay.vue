@@ -8,7 +8,7 @@
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">
-          <LabelUpdateForm @updated="refreshData" v-for="label in labels" :key="label.id" :label="label" :cards="this.cards"></LabelUpdateForm>
+          <LabelUpdateForm @updated="refreshData" v-for="label in labels" v-bind:key="label.id" :label="label" :cards="this.cards"></LabelUpdateForm>
       </div>
       <div class="offcanvas-bottom">
         <LabelCreateForm @created="refreshData"></LabelCreateForm>
@@ -53,7 +53,7 @@ export default {
 .offcanvas {
   background-color: lightblue;
 }
-.btn {
+.sticky-bottom {
   position: fixed;
   width: fit-content;
   height: fit-content;
@@ -63,7 +63,7 @@ export default {
   background-color: #e3f2fd;
   border: 2px solid grey;
 }
-.btn:hover {
+.sticky-bottom:hover {
   background-color: #e3f2fd;
   border: 2px solid navy;
 }

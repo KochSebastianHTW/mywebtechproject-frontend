@@ -31,22 +31,21 @@
               </div>
             </div>
             <div class="form-floating">
-              <select id="inputSelectLabel" class="form-select mb-3" v-model="labelId" aria-label="label select example" :style="{color: this.getLabelColor()}">
-                <option selected="selected" value="null" :style="{color: 'black'}">kein Label</option>
+              <select id="inputSelectLabel" class="form-select mb-3" v-model="cLabelId" aria-label="label select example" :style="{backgroundColor: getLabelColor(cLabelId), color: getContrast(getLabelColor(cLabelId))}">
+                <option selected="selected" :value="null" :style="{color: 'black', backgroundColor: 'white'}">kein Label</option>
                 <option v-for="label in labels" :key="label.id" :value=label.id :style="{backgroundColor: label.color, color: getContrast(label.color)}">{{ label.name }}</option>
               </select>
               <label for="inputSelectLabel">Label</label>
             </div>
-              <div class="row align-items-center">
-                <div id="election" class="col" v-for="statusitem in status" :key="statusitem.displayName">
-                  <label id="registerName" class="justify-content-between">{{ statusitem.displayName }}
-                    <br><input type="radio" name="radio" v-bind:checked="statusitem.register === this.card.register" :value="statusitem.register" v-model="cRegister">
-                  </label>
-                </div>
+            <div id="registerSelection" class="row align-items-center d-flex">
+              <div id="election" class="col" v-for="statusitem in status" :key="statusitem.displayName">
+                <label id="registerName" class="justify-content-between">{{ statusitem.displayName }}
+                  <br><input type="radio" name="radio" v-bind:checked="statusitem.register === this.card.register" :value="statusitem.register" v-model="cRegister">
+                </label>
+              </div>
             </div>
-            <br>
-            <button v-bind:id="['SaveBtn'+this.card.id]" type="submit" class="btn btn-outline-success me-3" @click.prevent="updateCard" @mouseover="mouseOver">Save</button>
-            <button id="DeleteBtn" type="button" class="btn btn-outline-danger me-3" @click="deleteCard">Delete</button>
+            <button v-bind:id="['SaveBtn' + this.card.id]" type="submit" class="btn btn-outline-success me-3" @click.prevent="updateCard" @mouseover="mouseOver">Save</button>
+            <button v-bind:id="['DeleteBtn' + this.card.id]" type="button" class="btn btn-outline-danger me-3" @click="deleteCard">Delete</button>
           </div>
         </form>
 
@@ -69,7 +68,7 @@ export default {
       cDescription: '',
       cDueDate: '',
       cRegister: '',
-      labelId: '',
+      cLabelId: '',
       serverValidationMessages: []
     }
   },
@@ -90,9 +89,13 @@ export default {
   emits: ['updated'],
   mounted () {
     this.resetCard()
+    this.resetButton(document.getElementById('SaveBtn' + this.card.id))
   },
   methods: {
     getContrast (input) {
+      if (input === '' || input === null) {
+        return 'black'
+      }
       const hexcolor = input.slice(1)
       const r = parseInt(hexcolor.substr(0, 2), 16)
       const g = parseInt(hexcolor.substr(2, 2), 16)
@@ -138,24 +141,25 @@ export default {
       this.cDescription = this.card.description
       this.cDueDate = moment(this.card.dueDate).format('YYYY-MM-DDTHH:mm')
       this.cRegister = this.card.register
-      this.labelId = this.card.label
-      this.resetButton(document.getElementById('SaveBtn' + this.card.id))
+      this.cLabelId = this.card.labelId
     },
-    getLabelColor () {
-      if (this.labelId === null) {
-        return 'black'
+    getLabelColor (labelId) {
+      if (labelId === null || labelId === '') {
+        return '#FFFFFF'
       }
       for (let i = 0; i < this.labels.length; i++) {
-        if (this.labels[i].id === this.labelId) {
+        if (this.labels[i].id === labelId) {
           return this.labels[i].color
         }
       }
+      return '#FFFFFF'
     },
     isEquals () {
       return this.cName === this.card.name &&
         this.cDescription === this.card.description &&
         this.cDueDate === this.card.dueDate &&
-        this.labelId === this.card.label
+        this.cRegister === this.card.register &&
+        this.cLabelId === this.card.labelId
     },
     deleteCard () {
       const endpoints = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/cards/' + this.card.id
@@ -166,8 +170,9 @@ export default {
       }
 
       fetch(endpoints, requestOptions)
+        .then(res => this.$emit('updated'))
         .catch(error => console.log('error', error))
-      this.$emit('updated')
+      document.getElementById('CloseBtn' + this.card.id).click()
     },
     async updateCard () {
       if (this.isEquals()) {
@@ -187,7 +192,7 @@ export default {
           description: this.cDescription,
           dueDate: this.cDueDate,
           register: this.cRegister,
-          label: this.labelId
+          labelId: this.cLabelId
         })
 
         const requestOptions = {
@@ -255,7 +260,7 @@ button {
   height: 40px;
   margin: 1px 5% 12px 0;
 }
-#DeleteBtn {
+.btn-outline-danger {
   float: left;
   width: auto;
   height: 40px;
@@ -277,9 +282,6 @@ input, textarea, select {
   border: 1px solid #2c3e50;
   width: 100%;
   border-radius: 8px;
-  background-color: floralwhite;
-}
-input:focus, textarea:focus, select:focus {
   background-color: white;
 }
 label {
@@ -290,5 +292,9 @@ label {
   bottom: 0;
   font-size: medium;
   color: black;
+}
+#registerSelection {
+  margin-bottom: 30px;
+  margin-top: -15px;
 }
 </style>

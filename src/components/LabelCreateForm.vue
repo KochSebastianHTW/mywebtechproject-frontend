@@ -1,16 +1,16 @@
 <template>
-  <form class="needs-validation" novalidate>
+  <form class="needs-validation" novalidate id="label-create-form">
     <div id="NamingDiv">
       <p id="NamingText">Neues Label erstellen</p>
     </div>
     <div id="inputGroup" class="d-inline-flex">
       <input id="inputColor" type="color" class="form-control" v-model="color">
       <input id="inputName" type="text" class="form-control" v-model="name" required :style="{backgroundColor: this.color, color: getContrast(this.color)}">
-      <button type="submit" class="btn btn-outline-success" @click="createLabel">Create</button>
-      <button type="button" class="btn btn-outline-danger" @click="resetInput">Reset</button>
-      <div class="invalid-feedback">
-        Please provide a name.
-      </div>
+      <button type="button" class="btn btn-outline-success" @click.prevent="createLabel">Create</button>
+      <button type="button" class="btn btn-outline-danger" @click.prevent="resetInput">Reset</button>
+    </div>
+    <div class="invalid-feedback">
+      Please provide a name.
     </div>
   </form>
 </template>
@@ -36,7 +36,7 @@ export default {
       return (val >= 128) ? 'black' : 'white'
     },
     resetInput () {
-      console.log('Reseting Label')
+      console.log('Resetting Label')
       this.name = ''
       this.color = '#FFFFFF'
     },
@@ -59,9 +59,9 @@ export default {
           body: payload,
           redirect: 'follow'
         }
-
+        console.log(payload)
         const response = await fetch(endpoints, requestOptions)
-        await this.handleResponse(response)
+        await this.handleResponse(response).then(res => this.resetInput())
       }
     },
     async handleResponse (response) {
@@ -77,7 +77,7 @@ export default {
       }
     },
     validate () {
-      const form = document.getElementById('card-create-form')
+      const form = document.getElementById('label-create-form')
       form.classList.add('was-validated')
       return form.checkValidity()
     }
@@ -120,17 +120,18 @@ export default {
 #inputColor:focus + input + button + button,
 button:active{
   visibility: visible;
-  transition: ease-in-out 200ms;
+  padding: 2px;
+  border-width: 2px;
   width: 22%;
-  pause: 1s;
 }
 .btn {
   visibility: hidden;
-  transition: ease-in-out 200ms;
+  transition: ease-in-out 250ms;
+  transition-delay: 250ms;
   width: 0;
   height: 30px;
-  padding: 2px;
-  border-width: 2px;
+  padding: 0;
+  border-width: 0;
   border-radius: 0;
 }
 </style>

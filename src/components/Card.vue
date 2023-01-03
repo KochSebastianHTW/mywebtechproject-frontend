@@ -2,12 +2,12 @@
   <div id="card" class="card" draggable="true" :style="{borderColor: actual.borderColor, borderWidth: actual.borderWith}">
     <p id="cardHeader" class="card-header d-inline-flex">{{ card.name }}</p>
     <div id="cardCenter">
-      <p class="card-text overflow-scroll">{{ card.description }}</p>
+      <p id="content">{{ card.description }}</p>
     </div>
     <div id="cardFooter" class="card-footer d-flex w-100 justify-content-between">
       <small id="date">{{ this.dateInFormat }}</small>
       <div >
-        <Label id="Label" v-for="label in labels" :key="label.id" v-show="label.id === card.label" :label=label></Label>
+        <Label id="Label" v-for="label in labels" :key="label.id" v-show="label.id === card.labelId" :label=label></Label>
       </div>
     </div>
   </div>
@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     recalculateTime () {
-      console.log('I\'m disinclined to acquiesce to your request -> ' + new Date())
+      // console.log('I\'m disinclined to acquiesce to your request -> ' + new Date())
       const dateNow = Date.now()
       const dateCard = Date.parse(this.card.dueDate)
       const diff = dateCard - dateNow
@@ -103,15 +103,21 @@ export default {
   height: 30px;
   font-size: larger;
   padding: 3px;
-  text-overflow: ellipsis;
+  overflow: scroll;
 }
 #cardCenter {
-  padding: 3px;
+  padding: 2px;
   font-size: small;
-  display: flex;
   flex-direction: column;
-  height: 50px;
-  break-after: auto;
+  height: 60px;
+}
+#content {
+  overflow: hidden;
+  white-space: pre-wrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  text-align: left;
 }
 #cardFooter {
   padding: 3px;

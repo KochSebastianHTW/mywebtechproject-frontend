@@ -68,18 +68,21 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
    * über die Navbar
 2. neue Karte erstellen
    * unter den Karten des Zustandes OPEN auf den Button zum Erstellen einer Karte klicken
-   * im geöffneten Fenster alle geforderten Informationen angeben
-   * Karte in OPEN erstellt
+   * im geöffneten Fenster alle geforderten Informationen angeben (mind. Name und Datum)
+   * "Create" Button lässt sich erst klicken, wenn alle obligatorischen Informationen angegeben wurden
+   * solange bewegt sich der Button unter der Maus weg, wenn man ihn drücken möchte
+   * Karte in Kategorie "OPEN" erstellt
 3. Karte bearbeiten
    * auf beliebige Karte klicken
    * gewünschte Änderungen im geöffneten Fenster vornehmen
-   * Änderungen speichern oder Fenster schließen
+   * Änderungen speichern
 4. Karte verschieben
    * beim Bearbeiten der Karte
-   * im geöffneten Fenster unten den Zustand auswählen
-   * Änderungen speichern oder Fenster schließen
+   * im geöffneten Fenster unten die Kategorie (Register) auswählen
+   * Änderungen speichern
 5. Karte löschen
-   * ???
+   * beim Bearbeiten der Karte
+   * im geöffneten Fenster auf "Delete" drücken 
 6. Label erstellen
    * unten rechts auf den Button "Labels" klicken
    * in der sich öffnenden Sidebar unten bei "neues Label erstellen" Namen eingeben und Farbe anpassen
@@ -89,4 +92,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
    * aus den oben stehenden Labels auswählen und dann anpassen
    * im Anschluss speichern
 8. Label löschen
-   * beim Bearbeiten neben dem "Save" Button auf den "Delete" Button klicken
+   * beim Bearbeiten des Labels
+   * neben dem "Save" Button auf den "Delete" Button klicken

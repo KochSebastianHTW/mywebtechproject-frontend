@@ -11,8 +11,8 @@
           <router-link class="nav-link" to="/board">Board</router-link>
         </div>
         <form class="d-flex" role="search">
-          <input id="search" class="form-control me-2" type="search" placeholder="Karte suchen ..." aria-label="Search" v-model="search">
-          <button class="btn btn-outline-success" type="submit" disabled>Suchen</button>
+          <input id="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="search">
+          <button class="btn btn-outline-success" type="submit" disabled>Search</button>
         </form>
       </div>
     </div>
@@ -38,5 +38,7 @@ export default {
 .container-fluid {
   margin: -10px 0 -10px 0;
 }
-
+.btn {
+  border-width: 2px;
+}
 </style>

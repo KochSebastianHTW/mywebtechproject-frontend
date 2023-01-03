@@ -1,13 +1,13 @@
 <template>
-  <form v-bind:id="['label-update-form'+this.label.id]" class="needs-validation" novalidate>
+  <form v-bind:id="['label-update-form' + this.label.id]" class="needs-validation" novalidate>
     <div id="inputGroup" class="d-inline-flex">
       <input id="inputColor" type="color" class="form-control" v-model="lColor">
       <input id="inputName" type="text" class="form-control" v-model="lName" required :style="{backgroundColor: lColor, color: getContrast(lColor)}">
-      <button type="submit" class="btn btn-outline-success" @click="updateLabel">Save</button>
-      <button type="button" class="btn btn-outline-danger" @click="deleteLabel">Delete</button>
-      <div class="invalid-feedback">
-        Please provide a name.
-      </div>
+      <button type="button" class="btn btn-outline-success" @click.prevent="updateLabel">Save</button>
+      <button type="button" class="btn btn-outline-danger" @click.prevent="deleteLabel">Delete</button>
+    </div>
+    <div class="invalid-feedback">
+      Please provide a name.
     </div>
   </form>
 </template>
@@ -47,7 +47,7 @@ export default {
     },
     resolveDependency () {
       for (let i = 0; i < this.cards.length; i++) {
-        if (this.cards[i].label === this.label.id) {
+        if (this.cards[i].labelId === this.label.id) {
           // eslint-disable-next-line vue/no-mutating-props
           const endpointsCard = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/cards/' + this.cards[i].id
 
@@ -59,7 +59,7 @@ export default {
             description: this.cards[i].description,
             dueDate: this.cards[i].dueDate,
             register: this.cards[i].register,
-            label: null
+            labelId: null
           })
 
           const requestOptions = {
@@ -86,9 +86,8 @@ export default {
       }
 
       fetch(endpointsLabel, requestOptions)
+        .then(res => this.$emit('updated'))
         .catch(error => console.log('error', error))
-
-      this.$emit('updated')
     },
     async updateLabel () {
       console.log('Updating Label: ' + this.label.name)
@@ -109,6 +108,7 @@ export default {
           body: loadout,
           redirect: 'follow'
         }
+        console.log(loadout)
 
         const response = await fetch(endpoints, requestOptions).catch(error => console.log('error', error))
         await this.handleResponse(response)
@@ -128,6 +128,7 @@ export default {
     },
     validate () {
       const form = document.getElementById('label-update-form' + this.label.id)
+      console.log('label-update-form' + this.label.id)
       form.classList.add('was-validated')
       return form.checkValidity()
     }
@@ -172,17 +173,18 @@ export default {
 #inputColor:focus + input + button + button,
 button:active{
   visibility: visible;
-  transition: ease-in-out 200ms;
   width: 20%;
-  pause: 1s;
+  padding: 2px;
+  border-width: 2px;
 }
 .btn {
   visibility: hidden;
-  transition: ease-in-out 200ms;
+  transition: ease-in-out 250ms;
+  transition-delay: 250ms;
   width: 0;
   height: 30px;
-  padding: 2px;
-  border-width: 2px;
+  padding: 0;
+  border-width: 0;
   border-radius: 0;
 }
 </style>

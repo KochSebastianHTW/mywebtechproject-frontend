@@ -19,4 +19,25 @@ describe('Testing \'CardCreateForm.vue\'', () => {
     // then
     expect(wrapper.find('#CardCreation').classes()).not.toContain('show')
   })
+
+  it('should show a clear form when click reset', () => {
+    // when
+    const wrapper = mount(CardCreateForm, {
+      propsData: {
+        labels: [
+          {
+            id: 1,
+            name: 'Test',
+            color: '#EED202'
+          }
+        ]
+      }
+    })
+
+    wrapper.find('#inputName').setValue('Testing')
+    // wrapper.find('#ResetBtn').trigger('click')
+
+    // then
+    expect(wrapper.find('#inputName')).toBe('Testing')
+  })
 })

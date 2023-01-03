@@ -4,7 +4,7 @@
     <h1>U know what to-do</h1>
     <br>
     <h4>Problemchen:</h4>
-    <p>1. CardUpdateForm merkt sich ungespeicherte Werte (wird nicht reseted)</p>
+    <p>1. einige Test schlage fehl, weil bspw. fetch undefined ist</p>
   </div>
 </template>
 
