@@ -89,7 +89,15 @@ export default {
         .then(res => this.$emit('updated'))
         .catch(error => console.log('error', error))
     },
+    isEquals () {
+      return this.lName === this.label.name &&
+        this.lColor === this.label.color
+    },
     async updateLabel () {
+      if (this.isEquals()) {
+        console.log('No Update needed')
+        return false
+      }
       console.log('Updating Label: ' + this.label.name)
       if (this.validate()) {
         const endpoints = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/labels/' + this.label.id

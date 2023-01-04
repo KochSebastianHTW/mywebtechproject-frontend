@@ -70,6 +70,7 @@ export default {
   margin:0 5px;
   white-space: nowrap;
   position: relative;
+  border-radius: 10px;
 }
 #name {
   background: lightblue;
@@ -80,6 +81,7 @@ export default {
   height: auto;
   padding: 8px;
   color: navy;
+  border-radius: 10px;
 }
 .list {
   padding-top: 2px;

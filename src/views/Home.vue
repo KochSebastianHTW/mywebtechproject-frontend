@@ -3,23 +3,30 @@
     <img alt="Vue logo" src="../assets/logo.png">
     <h1>U know what to-do</h1>
     <br>
-    <h4>Problemchen:</h4>
-    <p>1. einige Test schlage fehl, weil bspw. fetch undefined ist</p>
+    <h3>~ Your to-do website ~</h3>
+    <br>
+    <magic></magic>
   </div>
 </template>
 
 <script>
-
+import Magic from '@/components/magic'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Home'
+  name: 'Home',
+  components: { Magic }
 }
 </script>
 
 <style>
 .home {
   position: absolute;
-  top: 60px;
+  top: 100px;
   width: 100%;
+}
+h1 {
+  font-weight: bolder;
+  font-size: xxx-large;
+  font-family: 'Bahnschrift',cursive;
 }
 </style>

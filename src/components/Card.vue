@@ -79,9 +79,9 @@ export default {
       const diffMins = Math.round((diff / 1000))
       const diffDays = diffMins / 60 / 60 / 24
 
-      if (diffDays >= 1) {
+      if (diffDays >= 2) {
         this.actual = this.status[0]
-      } else if (diffDays >= 0 && diffDays < 1) {
+      } else if (diffDays >= 0 && diffDays < 2) {
         this.actual = this.status[1]
       } else if (diffDays < 0) {
         this.actual = this.status[2]

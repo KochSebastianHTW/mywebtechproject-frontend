@@ -1,5 +1,6 @@
 import CardCreateForm from '@/components/CardCreateForm'
 import { mount } from '@vue/test-utils'
+import moment from 'moment'
 
 describe('Testing \'CardCreateForm.vue\'', () => {
   it('should not show form by default', () => {
@@ -20,7 +21,7 @@ describe('Testing \'CardCreateForm.vue\'', () => {
     expect(wrapper.find('#CardCreation').classes()).not.toContain('show')
   })
 
-  it('should show a clear form when click reset', () => {
+  it('should set dueDate by default to current date and time', () => {
     // when
     const wrapper = mount(CardCreateForm, {
       propsData: {
@@ -31,13 +32,23 @@ describe('Testing \'CardCreateForm.vue\'', () => {
             color: '#EED202'
           }
         ]
+      },
+      data () {
+        return {
+          name: 'Hello',
+          description: 'my name is Mike',
+          dueDate: null,
+          labelId: '',
+          serverValidationMessages: []
+        }
       }
     })
 
-    wrapper.find('#inputName').setValue('Testing')
-    // wrapper.find('#ResetBtn').trigger('click')
-
+    wrapper.vm.clearCard()
     // then
-    expect(wrapper.find('#inputName')).toBe('Testing')
+    expect(wrapper.vm.name).toBe('')
+    expect(wrapper.vm.description).toBe('')
+    expect(wrapper.vm.dueDate).toBe(moment(new Date()).format('YYYY-MM-DDTHH:mm'))
+    expect(wrapper.vm.labelId).toBe(null)
   })
 })

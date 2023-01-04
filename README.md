@@ -94,3 +94,11 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 8. Label löschen
    * beim Bearbeiten des Labels
    * neben dem "Save" Button auf den "Delete" Button klicken
+9. nahende bzw. überschrittene Fälligkeit wird markiert
+   * farbliche Umrandung der Cards
+   * nur in den Registern Open/ In Progress
+   * mehr als 2 Tage → grau
+   * weniger als 2 Tage und noch nicht überschritten → orange
+   * überschritten → rot
+10. Kontrast für Label Farben
+   * basierend auf Kontrast zum Hintergrund wird Schriftfarbe gewählt → weiß/ schwarz
