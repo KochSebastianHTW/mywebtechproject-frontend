@@ -1,12 +1,12 @@
 <template>
-  <div class="register-lane" v-for="statusItem in status" :key="statusItem.register">
+  <div class="register-lane d-inline-flex" v-for="statusItem in status" :key="statusItem.register">
     <h2 id="name">{{ statusItem.displayName }}</h2>
-    <div class="list overflow-scroll">
+    <div class="list">
       <div id="cardList" v-for="card in cards" v-bind:key="card.id">
         <card-update-form @updated="refreshData" v-if="card.register === statusItem.register" :card="card" :labels="this.labels" :status="status"></card-update-form>
       </div>
-      <card-create-form @created="refreshData" v-if="statusItem.displayName === 'Open'" :labels=labels></card-create-form>
     </div>
+    <card-create-form @created="refreshData" v-if="statusItem.displayName === 'Open'" :labels=labels></card-create-form>
   </div>
 </template>
 
@@ -68,9 +68,11 @@ export default {
   flex-direction: column;
   width: 24.2%;
   margin:0 5px;
+  padding-bottom: 5px;
   white-space: nowrap;
   position: relative;
   border-radius: 10px;
+  max-height: 99%;
 }
 #name {
   background: lightblue;
@@ -85,10 +87,7 @@ export default {
 }
 .list {
   padding-top: 2px;
-  overflow-scrolling: touch;
-}
-card-create-form {
-  border-radius: 3px;
+  overflow-x: hidden;
 }
 button {
   border-style: hidden;

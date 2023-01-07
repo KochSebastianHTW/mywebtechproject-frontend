@@ -103,7 +103,7 @@ export default {
   height: 30px;
   font-size: larger;
   padding: 3px;
-  overflow: scroll;
+  overflow-y: hidden;
 }
 #cardCenter {
   padding: 2px;

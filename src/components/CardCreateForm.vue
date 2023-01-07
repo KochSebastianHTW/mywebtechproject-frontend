@@ -1,6 +1,6 @@
 <template>
   <button id="launch" type="button" data-bs-toggle="modal" data-bs-target="#CardCreation" @click="clearCard">
-    + Neue Karte erstellen
+    + Create a new card
   </button>
 
   <div class="modal fade" id="CardCreation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -216,17 +216,19 @@ button {
   border-style: hidden;
   border-radius: 3px;
   flex: 1 0 auto;
-  margin: 4px 0 2px 2px;
+  margin: 5px 0 2px 2px;
   padding: 2px 5px;
   display: flex;
-  background-color: #ebecf0;
+  background-color: #dadada;
   user-select: none;
-  width: fit-content;
+  width: 95%;
   position: relative;
-  left: 20%;
+  left: 2%;
+  top: 2px;
 }
 #launch:hover {
-  background-color: whitesmoke;
+  background-color: #b4b4b4;
+  color: dimgrey;
   border-radius: 3px;
 }
 .modal-body {

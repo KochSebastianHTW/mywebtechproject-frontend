@@ -4,7 +4,7 @@
 
     <div class="offcanvas offcanvas-end" tabindex="-1" id="LabelDisplayOffcanvas" aria-labelledby="offcanvasRightLabel">
       <div class="offcanvas-header">
-        <h3 id="heading">Deine Labels</h3>
+        <h3 id="heading">Your Labels</h3>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">

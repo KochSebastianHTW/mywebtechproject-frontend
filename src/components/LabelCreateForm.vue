@@ -1,7 +1,7 @@
 <template>
   <form class="needs-validation" novalidate id="label-create-form">
     <div id="NamingDiv">
-      <p id="NamingText">Neues Label erstellen</p>
+      <p id="NamingText">Create a new label</p>
     </div>
     <div id="inputGroup" class="d-inline-flex">
       <input id="inputColor" type="color" class="form-control" v-model="color">

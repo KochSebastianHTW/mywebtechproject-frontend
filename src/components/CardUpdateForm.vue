@@ -234,11 +234,11 @@ export default {
   margin: 0 0 5px 0;
   border: hidden;
   background-color: transparent;
-  transition: 150ms;
+  transition: 200ms;
 }
 #launch:hover {
-  scale: 1.05;
-  transition: 150ms;
+  scale: 1.02;
+  transition: 200ms;
 }
 .modal-body {
   max-height: calc(100vh - 210px);
